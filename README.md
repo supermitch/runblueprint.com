@@ -8,5 +8,5 @@ Running training plan generator.
 * Clone repo
 * Make virtual env. is repo root: `$ python3 -m venv venv`
 * Activate venv: `$ source venv/bin/activate`
+* Upgrade pip: `$ pip install -U pip`
 * Install dependencies: `$ pip install -r requirements.txt`
-
