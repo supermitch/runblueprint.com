@@ -14,10 +14,14 @@ def index(request):
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
+            return HttpResponseRedirect('/plans/thanks/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = PlanForm()
 
     return render(request, 'plans/plan_form.html', {'form': form})
+
+
+def thanks(request):
+    return render(request, 'plans/thanks.html', {})
