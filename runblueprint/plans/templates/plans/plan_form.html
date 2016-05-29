@@ -1,18 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action="/plans/" method="POST">
-    {% csrf_token %}
-    {% for field in form %}
-        <div class="form-group">
-            {{ field.errors }}
-            {{ field.label_tag }}
-            {{ field }}
-            {% if field.help_text %}
-            <p class="help-block">{{ field.help_text|safe }}</p>
-            {% endif %}
-        </div>
-    {% endfor %}
-    <input class="btn btn-primary btn-large" type="submit" value="Submit"/>
-</form>
+<div class="container">
+    <div class="starter-template">
+        <form action="/plans/" method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.errors }}
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                    <p class="help-block">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <input class="btn btn-primary btn-large" type="submit" value="Submit"/>
+        </form>
+    </div>
+</div>
 {% endblock %}
