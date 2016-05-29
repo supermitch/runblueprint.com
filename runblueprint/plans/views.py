@@ -28,3 +28,6 @@ def index(request):
 
 def thanks(request):
     return render(request, 'plans/thanks.html', {})
+
+def home(request):
+    return render(request, 'home.html', {})
