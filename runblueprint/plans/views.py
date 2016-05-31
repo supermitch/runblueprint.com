@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
 from .forms import PlanForm
-from .planner import plan
+from .planner import plan, sanity_check
 
 
 def index(request):
@@ -12,7 +12,7 @@ def index(request):
         form = PlanForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            my_plan = plan(form.cleaned_data)
+            my_plan = sanity_check(form.cleaned_data)
             print(my_plan)
             # process the data in form.cleaned_data as required
             # ...
