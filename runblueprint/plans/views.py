@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 
 from .forms import PlanForm
@@ -28,6 +28,9 @@ def index(request):
 
 def thanks(request):
     return render(request, 'plans/thanks.html', {})
+
+def download(request):
+    return render(request, 'plans/download.html', {})
 
 def home(request):
     return render(request, 'home.html', {})
