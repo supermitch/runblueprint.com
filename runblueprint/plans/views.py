@@ -31,6 +31,3 @@ def thanks(request):
 
 def download(request):
     return render(request, 'plans/download.html', {})
-
-def home(request):
-    return render(request, 'home.html', {})
