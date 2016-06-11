@@ -8,7 +8,7 @@ You should only need to do these steps once:
 
 * Download [Python 3.5+](https://www.python.org/downloads/)
 * Clone repo
-* Make virtual env. is repo root: `$ python3 -m venv venv`
+* Make virtual env in repo root: `$ python3 -m venv venv`
 * Activate venv: `$ source venv/bin/activate`
 * Upgrade pip: `$ pip install -U pip`
 * Setup database (see below)
@@ -34,7 +34,7 @@ Every time you work you need to do these steps:
 * Run database migrations: `$ ./manage.py migrate --settings=runblueprint.local_settings`
 * Run local server: `$ ./manage.py runserver --settings=runblueprint.local_settings`
 
-When you are done, don't forget to freeze requirements:
+Don't forget to freeze requirements if you installed new dependencies:
 
 * `$ pip freeze > requirements.txt`
 
