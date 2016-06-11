@@ -62,5 +62,6 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
-# DB
-db.sqlite3
+# local settings
+local_settings.py
+
