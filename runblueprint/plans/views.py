@@ -14,10 +14,11 @@ def index(request):
         if form.is_valid():
             my_plan = sanity_check(form.cleaned_data)
             print(my_plan)
+            request.session['plan_id'] = 3021
             # process the data in form.cleaned_data as required
             # ...
-            # redirect to a new URL:
-            return render(request, 'plans/plan.html', {'plan': my_plan})
+            return redirect('download')
+            # return render(request, 'plans/plan.html', {'plan': my_plan})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -30,4 +31,8 @@ def thanks(request):
     return render(request, 'plans/thanks.html', {})
 
 def download(request):
-    return render(request, 'plans/download.html', {})
+    if 'plan_id' in request.session:
+        context = {'plan_id': request.session['plan_id']}
+    else:
+        context = {}
+    return render(request, 'plans/download.html', context)
