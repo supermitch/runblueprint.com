@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 
 from .forms import PlanForm
-from .planner import plan, sanity_check
+from . import planner
 
 
 def index(request):
@@ -12,11 +12,12 @@ def index(request):
         form = PlanForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            my_plan = sanity_check(form.cleaned_data)
+            my_plan = planner.sanity_check(form.cleaned_data)
             print(my_plan)
-            request.session['plan_id'] = 3021
+
+            plan = planner.generate_plan(form.cleaned_data)
+            request.session['plan_id'] = plan.id
             # process the data in form.cleaned_data as required
-            # ...
             return redirect('download')
             # return render(request, 'plans/plan.html', {'plan': my_plan})
 
