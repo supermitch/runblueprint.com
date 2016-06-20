@@ -1,4 +1,7 @@
+import math
 import uuid
+
+from dateutil.relativedelta import *
 
 
 class Plan():
@@ -13,13 +16,21 @@ class Plan():
 def sanity_check(data):
     return "{}, your plan is {} weeks long.".format(data['your_name'], data['weeks'])
 
-def generate_plan(data):
+
+def generate_plan(form_data):
     plan = Plan()
-    weeks = data['weeks']
-    while weeks > 0:
+
+    weeks_count = determine_plan_length(form_data)  # TODO: Pass args
+    for _ in range(weeks_count):
         plan.weeks.append(plan_week())
-        weeks -= 1
     return plan
+
+
+def determine_plan_length(form_data):
+    plan_start = form_data['plan_start']
+    race_date = form_data['race_date']  # TODO: args
+    datediff = relativedelta(plan_start, race_date)
+    return math.ceil(datediff.weeks)
 
 def plan_week():
     week = {'days': [],

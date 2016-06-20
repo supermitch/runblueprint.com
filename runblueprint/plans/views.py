@@ -12,11 +12,9 @@ def index(request):
         form = PlanForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            my_plan = planner.sanity_check(form.cleaned_data)
-            print(my_plan)
-
             plan = planner.generate_plan(form.cleaned_data)
             request.session['plan_id'] = plan.id
+            print(plan)
             # process the data in form.cleaned_data as required
             return redirect('download')
             # return render(request, 'plans/plan.html', {'plan': my_plan})
