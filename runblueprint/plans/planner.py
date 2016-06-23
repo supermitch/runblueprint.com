@@ -29,11 +29,12 @@ def generate_plan(form_data):
 
 
 def determine_plan_start(plan_start, week_day_start):
-    idx = plan_start.isoweekday() % 7  # MON = 0, SUN = 6 -> SUN = 0 .. SAT = 6
-    print(idx)
-    print(week_day_start)
-    start_day = plan_start - datetime.timedelta(7 + idx - int(week_day_start))
-    print(start_day.isoweekday())
+    """
+    Calculate when the plan's first day is, given that week 1 must start on
+    the specified week_day_start.
+    """
+    delta_days = (7 - int(week_day_start) - plan_start.isoweekday()) % 7
+    start_day = plan_start - datetime.timedelta(delta_days)
     return start_day
 
 
