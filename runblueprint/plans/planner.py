@@ -14,6 +14,34 @@ class Plan():
     def __str__(self):
         return 'Plan {}: {} weeks'.format(self.id, len(self.weeks))
 
+    @property
+    def distance(self):
+        return sum(x.distance for x in self.weeks)
+
+    @property
+    def time(self):
+        return sum(x.time for x in self.weeks)
+
+
+class Week():
+    def __init__(self, number, days):
+        self.number = number
+        self.days = days
+
+    @property
+    def distance(self):
+        return sum(x.distance for x in self.days)
+
+    @property
+    def time(self):
+        return sum(x.time for x in self.days)
+
+
+class Day():
+    def __init__(self, number, date):
+        self.number = number
+        self.date = date
+
 
 def sanity_check(data):
     return "{}, your plan is {} weeks long.".format(data['your_name'], data['weeks'])
