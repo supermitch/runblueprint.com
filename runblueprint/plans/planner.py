@@ -1,8 +1,9 @@
+import datetime
 import math
 import uuid
 
-import datetime
 from dateutil.relativedelta import *
+from dateutil.rrule import *
 
 
 class Plan():
@@ -22,6 +23,9 @@ def generate_plan(form_data):
     plan = Plan()
 
     start_date = determine_plan_start(form_data['plan_start'], form_data['week_day_start'])
+    # TODO: Get end date after recovery block
+    plan_dates = generate_plan_dates(start_date, form_data['race_date'])
+    print(plan_dates)
     weeks_count = 26
     for _ in range(weeks_count):
         plan.weeks.append(plan_week())
@@ -36,6 +40,10 @@ def determine_plan_start(plan_start, week_day_start):
     delta_days = (7 - int(week_day_start) - plan_start.isoweekday()) % 7
     start_day = plan_start - datetime.timedelta(delta_days)
     return start_day
+
+
+def generate_plan_dates(start, end):
+    return list(rrule(DAILY, dtstart=start, until=end))
 
 
 def determine_plan_length(form_data):
