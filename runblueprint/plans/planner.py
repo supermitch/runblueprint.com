@@ -1,6 +1,7 @@
 import math
 import uuid
 
+import datetime
 from dateutil.relativedelta import *
 
 
@@ -20,18 +21,25 @@ def sanity_check(data):
 def generate_plan(form_data):
     plan = Plan()
 
-    weeks_count = determine_plan_length(form_data)  # TODO: Pass args
+    start_date = determine_plan_start(form_data['plan_start'], form_data['week_day_start'])
+    weeks_count = 26
     for _ in range(weeks_count):
         plan.weeks.append(plan_week())
     return plan
 
 
+def determine_plan_start(plan_start, week_day_start):
+    idx = plan_start.isoweekday() % 7  # MON = 0, SUN = 6 -> SUN = 0 .. SAT = 6
+    print(idx)
+    print(week_day_start)
+    start_day = plan_start - datetime.timedelta(7 + idx - int(week_day_start))
+    print(start_day.isoweekday())
+    return start_day
+
+
 def determine_plan_length(form_data):
-    plan_start = form_data['plan_start']
-    race_date = form_data['race_date']  # TODO: args
-    datediff = relativedelta(plan_start, race_date)
-    print('Start: {}, End: {}, diff: {}'.format(plan_start, race_date, datediff))
-    return math.ceil(datediff.weeks)
+    pass
+
 
 def plan_week():
     week = {'days': [],
