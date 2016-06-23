@@ -9,13 +9,13 @@ UNITS = [('mi', 'mi'), ('km', 'km')]
 TERRAINS = [('flat', 'flat'), ('hilly', 'hilly'), ('mountain', 'mountain')]
 WEEKENDS = [('Saturday', 'Saturday'), ('Sunday', 'Sunday')]
 WEEKDAYS = [
-    ('Monday', 'Monday'),
-    ('Tuesday', 'Tuesday'),
-    ('Wednesday', 'Wednesday'),
-    ('Thursday', 'Thursday'),
-    ('Friday', 'Friday'),
-    ('Saturday', 'Saturday'),
-    ('Sunday', 'Sunday'),
+    (0, 'Monday'),
+    (1, 'Tuesday'),
+    (2, 'Wednesday'),
+    (3, 'Thursday'),
+    (4, 'Friday'),
+    (5, 'Saturday'),
+    (6, 'Sunday'),
 ]
 TAPER_LENGTHS = [('1 week', '1 week'), ('2 weeks', '2 weeks'), ('3 weeks', '3 weeks')]
 
