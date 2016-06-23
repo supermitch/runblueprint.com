@@ -2,6 +2,8 @@ import datetime
 
 from django import forms
 
+from . import date_utils
+
 
 UNITS = [('mi', 'mi'), ('km', 'km')]
 TERRAINS = [('flat', 'flat'), ('hilly', 'hilly'), ('mountain', 'mountain')]
@@ -24,11 +26,13 @@ class PlanForm(forms.Form):
     your_name = forms.CharField(required=False)
 
     # Race details
-    race_date = forms.DateField(help_text='yyyy-mm-dd')
-    race_distance = forms.IntegerField()
+    race_date = forms.DateField(help_text='yyyy-mm-dd',
+        initial=date_utils.six_months)
+    race_distance = forms.IntegerField(initial=100)
     race_units = forms.ChoiceField(label='Units', choices=UNITS,
         initial=WEEKENDS[0][0])
     race_terrain = forms.ChoiceField(choices=TERRAINS,
+        initial=TERRAINS[1][0],
         widget=forms.RadioSelect)
     expected_time = forms.CharField(label='Expected completion time',
         required=False,

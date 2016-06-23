@@ -30,6 +30,7 @@ def determine_plan_length(form_data):
     plan_start = form_data['plan_start']
     race_date = form_data['race_date']  # TODO: args
     datediff = relativedelta(plan_start, race_date)
+    print('Start: {}, End: {}, diff: {}'.format(plan_start, race_date, datediff))
     return math.ceil(datediff.weeks)
 
 def plan_week():
