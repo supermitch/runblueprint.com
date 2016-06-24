@@ -50,7 +50,8 @@ def sanity_check(data):
 def generate_plan(form_data):
 
     start_date = determine_plan_start(form_data['plan_start'], form_data['week_day_start'])
-    end_date = form_data['end_date']  # TODO: Get end date after recovery block
+
+    end_date = add_recovery_block(form_data['race_date'])
 
     all_dates = generate_plan_dates(start_date, end_date)
 
@@ -71,6 +72,10 @@ def determine_plan_start(plan_start, week_day_start):
     delta_days = (7 - int(week_day_start) - plan_start.isoweekday()) % 7
     start_day = plan_start - datetime.timedelta(delta_days)
     return start_day
+
+
+def add_recovery_block(race_date):
+    return race_date + relativedelta(weeks=+5)
 
 
 def generate_plan_dates(start, end):
