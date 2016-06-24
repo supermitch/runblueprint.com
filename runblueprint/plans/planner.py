@@ -48,6 +48,13 @@ def sanity_check(data):
 
 
 def generate_plan(form_data):
+    blank_plan = generate_blank_plan(form_data)
+    # TODO: Actually fill in the plan
+    plan = blank_plan
+    return plan
+
+
+def generate_blank_plan(form_data):
 
     start_date = determine_plan_start(form_data['plan_start'], form_data['week_day_start'])
 
