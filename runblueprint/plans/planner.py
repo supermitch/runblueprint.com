@@ -94,18 +94,6 @@ def chunk_into_weeks(seq, size=7):
     return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
 
-def determine_plan_length(form_data):
-    pass
-
-
-def plan_week():
-    week = {'days': [],
-            'total_dist': 0}
-    days = 7
-    for i in range(0, 7):
-        week['days'].append({'day': i, 'dist': 5})
-    return week
-
 def stringify_plan(plan):
     """print plan out to console for debugging"""
     print(plan)
