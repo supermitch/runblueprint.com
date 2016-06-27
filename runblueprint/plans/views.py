@@ -14,7 +14,7 @@ def index(request):
         if form.is_valid():
             plan = planner.generate_plan(form.cleaned_data)
             request.session['plan_id'] = plan.id
-            print(plan)
+            print(plan.render_as('text'))
             # process the data in form.cleaned_data as required
             return redirect('download')
             # return render(request, 'plans/plan.html', {'plan': my_plan})

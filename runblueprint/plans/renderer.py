@@ -1,15 +1,18 @@
+import logging
+
+
 class Renderer():
     def __init__(self, plan):
         self.plan = plan  # raw plan object
 
-    def render_as(self, output='html'):
+    def render(self, mode='html'):
         renderers = {
             'html': self._html,
             'pdf': self._pdf,
             'text': self._text,
             'pickle': self._pickle,
         }
-        return renderers[output]()
+        return renderers[mode]()
 
     def _html(self):
         logging.info('Rendering html')
