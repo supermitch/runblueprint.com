@@ -24,7 +24,12 @@ class Renderer():
 
     def _text(self):
         logging.info('Rendering text')
-        return str(self.plan)
+        output = str(self.plan)
+        for week in self.plan.weeks:
+            output += '\n\t' + str(week)
+            for day in week.days:
+                output += '\n\t\t' + str(day)
+        return output
 
     def _pickle(self):
         logging.info('Rendering pickle')
