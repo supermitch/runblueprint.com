@@ -36,15 +36,19 @@ class Week():
     def time(self):
         return sum(x.time for x in self.days)
 
+    def __str__(self):
+        return 'Week {}: {}'.format(self.number, self.distance)
+
 
 class Day():
     def __init__(self, number, date):
         self.number = number
         self.date = date
+        self.distance = 0
+        self.time = 0
 
-
-def sanity_check(data):
-    return "{}, your plan is {} weeks long.".format(data['your_name'], data['weeks'])
+    def __str__(self):
+        return 'Day {}: {}'.format(self.number, self.distance)
 
 
 def generate_plan(form_data):
@@ -82,6 +86,7 @@ def determine_plan_start(plan_start, week_day_start):
 
 
 def add_recovery_block(race_date):
+    # TODO: Variable length recovery block
     return race_date + relativedelta(weeks=+5)
 
 
@@ -92,8 +97,3 @@ def generate_plan_dates(start, end):
 def chunk_into_weeks(seq, size=7):
     """ Chunks days into week batches. """
     return (seq[pos:pos + size] for pos in range(0, len(seq), size))
-
-
-def stringify_plan(plan):
-    """print plan out to console for debugging"""
-    print(plan)
