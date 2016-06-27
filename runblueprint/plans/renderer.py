@@ -26,9 +26,9 @@ class Renderer():
         logging.info('Rendering text')
         output = str(self.plan)
         for week in self.plan.weeks:
-            output += '\n\t' + str(week)
+            output += '\n  ' + str(week)
             for day in week.days:
-                output += '\n\t\t' + str(day)
+                output += '\n    ' + str(day)
         return output
 
     def _pickle(self):
