@@ -32,6 +32,7 @@ class Week():
     def __init__(self, number, days):
         self.number = number
         self.days = days
+        self.title = None
 
     @property
     def distance(self):
