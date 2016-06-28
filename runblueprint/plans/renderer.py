@@ -1,5 +1,7 @@
 import logging
 
+from django.template.loader import render_to_string
+
 
 class Renderer():
     def __init__(self, plan):
@@ -15,10 +17,8 @@ class Renderer():
         return renderers[mode]()
 
     def _html(self):
-        import jinja2
         logging.info('endering html')
-        template = jinja2.Template('<b>PLAN {{ plan_id }}!</b>')
-        return template.render(plan_id=self.plan.id)
+        return render_to_string('plans/render_plan.html', {'plan': self.plan})
 
     def _pdf(self):
         logging.info('Rendering pdf')
