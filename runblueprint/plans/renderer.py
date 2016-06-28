@@ -17,7 +17,7 @@ class Renderer():
         return renderers[mode]()
 
     def _html(self):
-        logging.info('endering html')
+        logging.info('Rendering html')
         return render_to_string('plans/render_plan.html', {'plan': self.plan})
 
     def _pdf(self):

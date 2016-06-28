@@ -1,5 +1,13 @@
 <html>
-<p>Plan number {{ plan.id }}</p>
+  <h1>Plan number {{ plan.id }}</h1>
 
-<p>Your plan:</p>
+  {% for week in plan.weeks %}
+  <h3>Week {{ week.number }} - {{ week.title }}</h3>
+    <ul>
+    {% for day in week.days %}
+      <li>Day {{ day.number }}: {{ day.distance}}</li>
+    {% endfor %}
+    </ul>
+  {% endfor %}
+
 </html>
