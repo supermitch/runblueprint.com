@@ -15,8 +15,10 @@ class Renderer():
         return renderers[mode]()
 
     def _html(self):
-        logging.info('Rendering html')
-        return '<b>PLAN!</b>'
+        import jinja2
+        logging.info('endering html')
+        template = jinja2.Template('<b>PLAN {{ plan_id }}!</b>')
+        return template.render(plan_id=self.plan.id)
 
     def _pdf(self):
         logging.info('Rendering pdf')
