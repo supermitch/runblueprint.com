@@ -2,26 +2,23 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 
 from .forms import PlanForm
-from . import planner
+from . import planner, persister
 
 
 def index(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = PlanForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
+    if request.method == 'POST':  # if this is a POST request we need to process the form data
+        form = PlanForm(request.POST)  # create a form instance and populate it with data from the request
+        if form.is_valid():  # check whether it's valid
             plan = planner.generate_plan(form.cleaned_data)
             request.session['plan_id'] = plan.id
-            print(plan.render_as('text'))
-            print(plan.render_as('html'))
-            # process the data in form.cleaned_data as required
-            return redirect('download')
-            # return render(request, 'plans/plan.html', {'plan': my_plan})
 
-    # if a GET (or any other method) we'll create a blank form
-    else:
+            print(plan.render_as('text'))
+
+            persister.persist(plan)  # Save plan to disk
+
+            return redirect('download')
+
+    else:  # if a GET (or any other method) we'll create a blank form
         form = PlanForm()
 
     return render(request, 'plans/plan_form.html', {'form': form})
