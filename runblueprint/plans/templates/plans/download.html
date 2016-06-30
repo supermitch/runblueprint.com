@@ -2,6 +2,12 @@
 
 <p>Here is your plan ID {{ plan_id }}</p>
 
+<ul>
+  <li><a href="{{MEDIA_URL}}/{{ plan_id }}.txt">TEXT</a></li>
+  <li><a href="{{MEDIA_URL}}/{{ plan_id }}.pdf">PDF</a></li>
+  <li><a href="{{MEDIA_URL}}/{{ plan_id }}.html">HTML</a></li>
+</ul>
+
 <p>Enjoy!</p>
 
 <p><a href="{% url 'plans' %}">Design another plan</a></p>
