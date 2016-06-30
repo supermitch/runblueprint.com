@@ -32,6 +32,7 @@ Every time you work you need to do these steps:
 * Activate venv: `$ source venv/bin/activate`
 * Install dependencies: `$ pip install -r requirements.txt`
 * Run database migrations: `$ ./manage.py migrate --settings=runblueprint.local_settings`
+  * Note that you need a `local_settings.py` file with your DB settings, at least!
 * Run local server: `$ ./manage.py runserver --settings=runblueprint.local_settings`
 
 Don't forget to freeze requirements if you installed new dependencies:
