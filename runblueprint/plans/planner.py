@@ -5,8 +5,6 @@ import uuid
 from dateutil.relativedelta import *
 from dateutil.rrule import *
 
-from . import renderer
-
 
 class Plan():
     def __init__(self, weeks):
@@ -23,9 +21,6 @@ class Plan():
     @property
     def time(self):
         return sum(x.time for x in self.weeks)
-
-    def render_as(self, mode):
-        return renderer.Renderer(self).render(mode)
 
 
 class Week():

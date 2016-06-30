@@ -65,3 +65,5 @@ target/
 # local settings
 local_settings.py
 
+# Media files
+runblueprint/media/

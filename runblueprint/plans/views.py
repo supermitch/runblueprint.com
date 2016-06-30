@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 
 from .forms import PlanForm
-from . import planner, persister
+from . import planner, persister, renderer
 
 
 def index(request):
@@ -12,7 +12,7 @@ def index(request):
             plan = planner.generate_plan(form.cleaned_data)
             request.session['plan_id'] = plan.id
 
-            print(plan.render_as('text'))
+            print(renderer.render(plan, 'txt'))
 
             persister.persist(plan)  # Save plan to disk
 
