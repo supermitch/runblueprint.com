@@ -39,3 +39,9 @@ Don't forget to freeze requirements if you installed new dependencies:
 
 * `$ pip freeze > requirements.txt`
 
+## Makefile
+
+Some handy shortcuts in the Makefile
+
+* Start development server: `$ make runserver`
+
