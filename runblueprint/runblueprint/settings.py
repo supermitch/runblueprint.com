@@ -34,7 +34,7 @@ else:
 
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']  # SECURITY WARNING: keep the secret key used in production secret!
 logging.error('SECRET KEY IS <{}>'.format(SECRET_KEY))
-logging.error('HOSTNAME IS <{}>'.format(RDS_USERNAME))
+logging.error('HOSTNAME IS <{}>'.format(os.environ['RDS_USERNAME']))
 
 
 
