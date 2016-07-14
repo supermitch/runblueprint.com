@@ -60,20 +60,16 @@ def generate_plan(form_data):
 
 
 def generate_blank_plan(form_data):
-
+    """
+    A blank plan has all the days of training in it, including
+    recovery block. But the no distances or workouts.
+    """
     start_date = determine_plan_start(form_data['plan_start'], form_data['week_day_start'])
-
     end_date = add_recovery_block(form_data['race_date'])
-
     all_dates = generate_plan_dates(start_date, end_date)
-
     all_days = list(Day(i, d) for i, d in enumerate(all_dates, start=1))
-
     all_weeks = list(Week(i, w) for i, w in enumerate(chunk_into_weeks(all_days), start=1))
-
-    plan = Plan(all_weeks)
-
-    return plan
+    return Plan(all_weeks)
 
 
 def determine_plan_start(plan_start, week_day_start):
