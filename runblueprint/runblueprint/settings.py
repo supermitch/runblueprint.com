@@ -19,11 +19,11 @@ if 'RDS_DB_NAME' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
+            'NAME': os.environ.get('RDS_DB_NAME', ''),
+            'USER': os.environ.get('RDS_USERNAME', ''),
+            'PASSWORD': os.environ.get('RDS_PASSWORD', ''),
+            'HOST': os.environ.get('RDS_HOSTNAME', ''),
+            'PORT': os.environ.get('RDS_PORT', ''),
         },
     }
 else:
@@ -31,7 +31,7 @@ else:
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
-SECRET_KEY = os.environ['DJANGO_SECRET_KEY']  # SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')  # SECURITY WARNING: keep the secret key used in production secret!
 
 DEBUG = False  # SECURITY WARNING: don't run with debug turned on in production!
 
