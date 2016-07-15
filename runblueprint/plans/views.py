@@ -3,13 +3,15 @@ from django.http import HttpResponseRedirect
 
 from .forms import PlanForm
 from . import planner, persister, renderer
+from .formdata import FormData
 
 
 def index(request):
     if request.method == 'POST':  # if this is a POST request we need to process the form data
         form = PlanForm(request.POST)  # create a form instance and populate it with data from the request
         if form.is_valid():  # check whether it's valid
-            plan = planner.generate_plan(form.cleaned_data)
+            form_data = FormData(form.cleaned_data)
+            plan = planner.generate_plan(form_data)
             request.session['plan_id'] = plan.id
 
             print(renderer.render(plan, 'txt'))
