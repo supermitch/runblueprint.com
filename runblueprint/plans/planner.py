@@ -65,7 +65,7 @@ def generate_blank_plan(form_data):
     recovery block. But the no distances or workouts.
     """
     start_date = determine_plan_start(form_data.plan_start, form_data.week_day_start)
-    end_date = add_recovery_block(form_data.race_date)
+    end_date = add_recovery_block(form_data.race_date, form_data.recovery_weeks)
     all_dates = generate_plan_dates(start_date, end_date)
     all_days = list(Day(i, d) for i, d in enumerate(all_dates, start=1))
     all_weeks = list(Week(i, w) for i, w in enumerate(chunk_into_weeks(all_days), start=1))
@@ -82,9 +82,8 @@ def determine_plan_start(plan_start, week_day_start):
     return start_day
 
 
-def add_recovery_block(race_date):
-    # TODO: Variable length recovery block
-    return race_date + relativedelta(weeks=+5)
+def add_recovery_block(race_date, recovery_weeks):
+    return race_date + relativedelta(weeks=+recovery_weeks)
 
 
 def generate_plan_dates(start, end):

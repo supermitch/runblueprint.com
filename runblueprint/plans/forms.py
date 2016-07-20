@@ -78,6 +78,9 @@ class PlanForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         required=False)
     taper_length = forms.ChoiceField(choices=TAPER_LENGTHS,
-        initial=TAPER_LENGTHS[1][0],
+        initial=TAPER_LENGTHS[2][0],
         widget=forms.RadioSelect)
+    recovery_weeks = forms.IntegerField(initial=5,
+        required=False,
+        help_text='We recommend between 5 and 8 weeks')
 
