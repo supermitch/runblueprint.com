@@ -33,7 +33,8 @@ class PlanForm(forms.Form):
         initial=WEEKENDS[0][0])
     race_terrain = forms.ChoiceField(choices=TERRAINS,
         initial=TERRAINS[1][0],
-        widget=forms.RadioSelect)
+        widget=forms.RadioSelect,
+        disabled=True)
     expected_time = forms.CharField(label='Expected completion time',
         required=False,
         help_text='e.g. 23:59:59')
