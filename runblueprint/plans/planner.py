@@ -49,7 +49,11 @@ class Day():
         self.time = 0
 
     def __str__(self):
-        return 'Day {}: {}'.format(self.number, self.distance)
+        return '{}. {} {}: {}'.format(self.number,
+            self.date.strftime('%Y-%m-%d'),
+            self.date.strftime('%a'),
+            self.distance)
+
 
 
 def generate_plan(form_data):
