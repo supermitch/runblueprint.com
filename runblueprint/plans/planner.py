@@ -9,7 +9,7 @@ from dateutil.rrule import *
 class Plan():
     def __init__(self, weeks):
         self.id = uuid.uuid1().hex
-        self.weeks = weeks
+        self.weeks = weeks  # List of weeks
 
     def __str__(self):
         return 'Plan {}: {} weeks'.format(self.id, len(self.weeks))
@@ -22,12 +22,20 @@ class Plan():
     def time(self):
         return sum(x.time for x in self.weeks)
 
+    def get_week(self, title):
+        """ Find a week by title. """
+        for week in self.weeks:
+            if week.title.lower() == title:
+                return week
+
 
 class Week():
+
     def __init__(self, number, days):
         self.number = number
-        self.days = days
-        self.title = None
+        self.days = days  # List of days
+        self.title = ''
+        self._plan_distance = 0  # Internal: planned distance for that week
 
     @property
     def distance(self):
@@ -38,7 +46,7 @@ class Week():
         return sum(x.time for x in self.days)
 
     def __str__(self):
-        return 'Week {}: {}'.format(self.number, self.distance)
+        return 'Week {}: "{}" ({} km)'.format(self.number, self.title, self.distance)
 
 
 class Day():
@@ -47,6 +55,7 @@ class Day():
         self.date = date
         self.distance = 0
         self.time = 0
+        self.type = None  # Run type, e.g. Easy, Tempo
 
     def __str__(self):
         return '{}. {} {}: {}'.format(self.number,
