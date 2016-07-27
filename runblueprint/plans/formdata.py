@@ -11,5 +11,17 @@ class FormData():
 
     def parse_raw_data(self):
         """ Turn dict k:v pairs into instance attributes """
+        ints = [
+            'race_distance',
+            'steady_mileage',
+            'peak_mileage',
+            'year_mileage',
+            'three_month_mileage',
+            'longest_distance',
+            'taper_length',
+            'recovery_weeks',
+        ]
         for key, value in self.raw_data.items():
+            if value is not None and key in ints:
+                value = int(value)
             setattr(self, key, value)

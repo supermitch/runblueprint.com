@@ -56,6 +56,7 @@ class PlanForm(forms.Form):
     ten_km_pr = forms.CharField(label='10k PR',
         help_text='e.g. 38:27',
         required=False)
+
     # Schedule
     plan_start = forms.DateField(label='Training start date',
         initial=datetime.date.today)
@@ -78,9 +79,9 @@ class PlanForm(forms.Form):
         initial=(WEEKDAYS[1][0],),
         widget=forms.CheckboxSelectMultiple,
         required=False)
-    taper_length = forms.ChoiceField(choices=TAPER_LENGTHS,
-        initial=TAPER_LENGTHS[2][0],
-        widget=forms.RadioSelect)
+    taper_length = forms.IntegerField(initial=3,
+        required=False,
+        help_text='We recommend 2 or 3 weeks')
     recovery_weeks = forms.IntegerField(initial=5,
         required=False,
         help_text='We recommend between 5 and 8 weeks')
