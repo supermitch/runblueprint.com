@@ -129,7 +129,6 @@ def determine_plan_start(plan_start, week_day_start):
 
 def determine_peak_week(plan, form_data):
     peak_day = form_data.race_date + relativedelta(weeks=-form_data.taper_length)
-    print('peak day {}'.format(peak_day))
     for week in plan.weeks:
         for day in week.days:
             if day.date == peak_day:
@@ -142,7 +141,7 @@ def add_recovery_block(race_date, recovery_weeks):
 
 
 def generate_plan_dates(start, end):
-    return list(rrule(DAILY, dtstart=start, until=end))
+    return list(d.date() for d in rrule(DAILY, dtstart=start, until=end))
 
 
 def chunk_into_weeks(seq, size=7):
