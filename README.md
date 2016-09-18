@@ -25,7 +25,7 @@ $ psql
 > GRANT ALL PRIVILEGES ON DATABASE <dbname> TO <username>;
 ```
 
-# Dev
+# Development
 
 Every time you work you need to do these steps:
 
@@ -39,9 +39,20 @@ Don't forget to freeze requirements if you installed new dependencies:
 
 * `$ pip freeze > requirements.txt`
 
+## Production
+
+RBP is running on AWS Elastic Beanstalk. Use the EB CLI client to interact
+with the app and environment.
+
+* [Command Reference](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb3-cmd-commands.html)
+
+**Currently there is no test environment!**
+
 ## Makefile
 
 Some handy shortcuts in the Makefile
 
 * Start development server: `$ make runserver`
+* Deploy to **Production**: `$ make deploy`
+
 
