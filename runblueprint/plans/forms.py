@@ -26,8 +26,8 @@ class PlanForm(forms.Form):
     your_name = forms.CharField(required=False)
 
     # Race details
-    race_date = forms.DateField(help_text='(yyyy-mm-dd)',
-        initial=date_utils.six_months)
+    race_date = forms.DateField(initial=date_utils.six_months,
+        help_text='(yyyy-mm-dd)')
     race_distance = forms.IntegerField(initial=100)
     race_units = forms.ChoiceField(label='Units', choices=UNITS,
         initial=WEEKENDS[0][0])
@@ -59,6 +59,7 @@ class PlanForm(forms.Form):
 
     # Schedule
     plan_start = forms.DateField(label='Training start date',
+        help_text='(yyyy-mm-dd)',
         initial=datetime.date.today)
     week_day_start = forms.ChoiceField(choices=WEEKDAYS,
         initial=WEEKDAYS[0][0],
@@ -72,14 +73,17 @@ class PlanForm(forms.Form):
     days_off = forms.MultipleChoiceField(choices=WEEKDAYS,
         initial=(WEEKDAYS[4][0],),
         widget=forms.CheckboxSelectMultiple,
+        help_text='Days you <em>absolutely</em> cannot run',
         required=False,
         disabled=True)
     double_days = forms.MultipleChoiceField(choices=WEEKDAYS,
+        help_text='Preferred days for doubles',
         initial=(WEEKDAYS[0][0], WEEKDAYS[3][0]),
         widget=forms.CheckboxSelectMultiple,
         required=False,
         disabled=True)
     crosstraining_days = forms.MultipleChoiceField(choices=WEEKDAYS,
+        help_text='Preferred days for cross-training',
         initial=(WEEKDAYS[1][0],),
         widget=forms.CheckboxSelectMultiple,
         required=False,
