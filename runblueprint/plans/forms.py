@@ -26,7 +26,7 @@ class PlanForm(forms.Form):
     your_name = forms.CharField(required=False)
 
     # Race details
-    race_date = forms.DateField(help_text='yyyy-mm-dd',
+    race_date = forms.DateField(help_text='(yyyy-mm-dd)',
         initial=date_utils.six_months)
     race_distance = forms.IntegerField(initial=100)
     race_units = forms.ChoiceField(label='Units', choices=UNITS,
@@ -62,23 +62,28 @@ class PlanForm(forms.Form):
         initial=datetime.date.today)
     week_day_start = forms.ChoiceField(choices=WEEKDAYS,
         initial=WEEKDAYS[0][0],
-        required=False)
+        required=False,
+        disabled=True)
     long_run_day = forms.ChoiceField(choices=WEEKENDS,
         initial=WEEKENDS[0][0],
         widget=forms.RadioSelect,
-        required=False)
+        required=False,
+        disabled=True)
     days_off = forms.MultipleChoiceField(choices=WEEKDAYS,
         initial=(WEEKDAYS[4][0],),
         widget=forms.CheckboxSelectMultiple,
-        required=False)
+        required=False,
+        disabled=True)
     double_days = forms.MultipleChoiceField(choices=WEEKDAYS,
         initial=(WEEKDAYS[0][0], WEEKDAYS[3][0]),
         widget=forms.CheckboxSelectMultiple,
-        required=False)
+        required=False,
+        disabled=True)
     crosstraining_days = forms.MultipleChoiceField(choices=WEEKDAYS,
         initial=(WEEKDAYS[1][0],),
         widget=forms.CheckboxSelectMultiple,
-        required=False)
+        required=False,
+        disabled=True)
     taper_length = forms.IntegerField(initial=3,
         required=False,
         help_text='We recommend 2 or 3 weeks')
