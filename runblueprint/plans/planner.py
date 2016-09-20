@@ -33,7 +33,7 @@ class Plan():
 
 class Week():
     _WeekTypes = collections.namedtuple('WeekTypes', 'Base Growth Work Peak Taper Race')
-    Types = _WeekTypes('base', 'growth', 'work', 'peak', 'taper', 'race')
+    Types = _WeekTypes(*_WeekTypes._fields)  # Define constants for Week Types
 
     def __init__(self, number, days):
         self.number = number
