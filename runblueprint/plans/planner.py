@@ -1,9 +1,11 @@
+import collections
 import datetime
 import math
 import uuid
 
 from dateutil.relativedelta import *
 from dateutil.rrule import *
+
 
 
 class Plan():
@@ -30,11 +32,14 @@ class Plan():
 
 
 class Week():
+    _WeekTypes = collections.namedtuple('WeekTypes', 'Base Growth Work Peak Taper Race')
+    Types = _WeekTypes('base', 'growth', 'work', 'peak', 'taper', 'race')
 
     def __init__(self, number, days):
         self.number = number
         self.days = days  # List of days
         self.title = ''
+        self.type = ''
         self._plan_distance = 0  # Internal: planned distance for that week
 
     @property
@@ -46,7 +51,7 @@ class Week():
         return sum(x.time for x in self.days)
 
     def __str__(self):
-        return 'Week {}: "{}" ({} km)'.format(self.number, self.title, self.distance)
+        return 'Week {}: "{}" ({}, {} km)'.format(self.number, self.title, self.type, self.distance)
 
 
 class Day():
@@ -69,9 +74,15 @@ def generate_plan(form_data):
     plan = generate_blank_plan(form_data)
 
     determine_peak_week(plan, form_data)  # Sets peak week
+    assign_week_types(plan, form_data)
     assign_mileages(plan, form_data)
 
     return plan
+
+
+def assign_week_types(plan, form_data):
+    for week in plan.weeks:
+        week.type = Week.Types.Base  # Temporarily ALL weeks are base weeks!
 
 
 def assign_mileages(plan, form_data):
