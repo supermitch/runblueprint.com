@@ -1,5 +1,6 @@
 import collections
 import datetime
+import logging
 import math
 import uuid
 
@@ -24,11 +25,11 @@ class Plan():
     def time(self):
         return sum(x.time for x in self.weeks)
 
-    def get_week(self, title):
-        """ Find a week by title. """
-        for week in self.weeks:
+    def get(self, title):
+        """ Find a week by title, return (index, week) tuple. """
+        for i, week in enumerate(self.weeks):
             if week.title.lower() == title:
-                return week
+                return i, week
 
 
 class Week():
@@ -40,7 +41,7 @@ class Week():
         self.days = days  # List of days
         self.title = ''
         self.type = ''
-        self._plan_distance = 0  # Internal: planned distance for that week
+        self._target_distance = 0  # Internal: planned distance for that week
 
     @property
     def distance(self):
@@ -86,10 +87,21 @@ def assign_week_types(plan, form_data):
 
 
 def assign_mileages(plan, form_data):
-    starting_mileage = determine_starting_mileage(form_data)
-    peak_mileage = determine_peak_mileage(form_data)
-    plan.weeks[0]._plan_distance = starting_mileage
-    plan.get_week('peak week')._plan_distance = starting_mileage
+    """ Assign weekly mileage targets to each of our plan's weeks. """
+    start_dist = determine_starting_mileage(form_data)  # TODO: Week 0 might be a base phase and not actually use the "starting mileage" value
+    peak_dist = determine_peak_mileage(form_data)
+
+    start_idx = 0
+    peak_idx, _ = plan.get('peak week')
+
+    logging.warn((start_dist, peak_dist, start_idx, peak_idx))
+    for i, week in enumerate(plan.weeks[:peak_idx + 1]):  # Fill in from weeks 0 to peak week
+        target_distance = (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
+        week._target_distance = target_distance
+
+    for week in plan.weeks:
+        week.days[0].distance = week._target_distance  # TODO: Use a scaled template
+
 
 
 def determine_starting_mileage(form_data):
@@ -100,6 +112,8 @@ def determine_starting_mileage(form_data):
     * steady_mileage
     """
     starting_mileage = form_data.steady_mileage
+    if starting_mileage is None:
+        starting_mileage = 40
     return starting_mileage
 
 
