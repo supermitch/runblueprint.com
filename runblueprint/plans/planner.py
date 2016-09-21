@@ -6,17 +6,13 @@ import uuid
 
 from dateutil.relativedelta import *
 from dateutil.rrule import *
-from .prototypes import weeks as week_protos
-
+from .prototypes import weeks as weekprototypes
 
 
 class Plan():
     def __init__(self, weeks):
         self.id = uuid.uuid1().hex
         self.weeks = weeks  # List of weeks
-        # Not sure how I want to design this yet
-        self.base_week_proto = week_protos.base_week
-        self.rest_week_proto = week_protos.rest_week
 
     def __str__(self):
         return 'Plan {}: {} weeks'.format(self.id, len(self.weeks))
@@ -78,9 +74,8 @@ def generate_plan(form_data):
 
     determine_peak_week(plan, form_data)  # Sets peak week
     assign_week_types(plan, form_data)
-    # spawn_weeks(plan, week_prototypes) # Fill in days with unscaled values from prototypes
     assign_mileages(plan, form_data)
-    # scale_days(plan) # Scale days in each week by weekly milage
+    build_week(plan)
 
     return plan
 
@@ -103,9 +98,17 @@ def assign_mileages(plan, form_data):
         target_distance = (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
         week._target_distance = target_distance
 
-    for week in plan.weeks:
-        week.days[0].distance = week._target_distance  # TODO: Use a scaled template
+def build_week(plan):
+    """ Determine daily distance by based on weekly distance. """
+    baseweekproto = weekprototypes.base_week
+    restweekproto = weekprototypes.rest_week
 
+    for week in plan.weeks:
+        weekly_distance = week._target_distance
+        for day in week.days:
+            dayoftheweek = day.number % 7
+            percent = baseweekproto[dayoftheweek]['percent_of_weekly_distance']
+            day.distance = weekly_distance * percent
 
 
 def determine_starting_mileage(form_data):

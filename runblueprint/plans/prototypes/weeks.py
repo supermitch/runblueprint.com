@@ -1,52 +1,54 @@
 base_week = {
     0: {  # Monday
-        'dist': 9
+        'percent_of_weekly_distance': 0.0875
     },
     1: {
-        'dist': 13,
+        'percent_of_weekly_distance': 0.125,
         'type': 'strides'
     },
     2: {
-        'dist': 21
+        'percent_of_weekly_distance': 0.2
     },
     3: {
-        'dist': 8,
+        'percent_of_weekly_distance': 0.1,
         'type': 'strides'
     },
     4: {
-        'dist': 0,
+        'percent_of_weekly_distance': 0,
         'type': 'x-train',
     },
     5: {
-        'dist': 11
+        'percent_of_weekly_distance': 0.1
     },
     6: {
-        'dist': 38,
+        'percent_of_weekly_distance': 0.4,
         'type': 'long',
     },
 }
 
 rest_week = {
-    0: {
-        "dist": 16,
-        "attributes": ['longrun']
+    0: {  # Monday
+        'percent_of_weekly_distance': 0.0875
     },
     1: {
-        "dist": 0
+        'percent_of_weekly_distance': 0.125,
+        'type': 'strides'
     },
     2: {
-        "dist": 10
+        'percent_of_weekly_distance': 0.0
     },
     3: {
-        "dist": 0
+        'percent_of_weekly_distance': 0.1,
+        'type': 'strides'
     },
     4: {
-        "dist": 12
+        'percent_of_weekly_distance': 0,
+        'type': 'x-train',
     },
     5: {
-        "dist": 0
+        'percent_of_weekly_distance': 0.1
     },
     6: {
-        "dist": 12
-    }
+        'percent_of_weekly_distance': 0.2,
+    },
 }
