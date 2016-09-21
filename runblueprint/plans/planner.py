@@ -78,7 +78,9 @@ def generate_plan(form_data):
 
     determine_peak_week(plan, form_data)  # Sets peak week
     assign_week_types(plan, form_data)
+    # spawn_weeks(plan, week_prototypes) # Fill in days with unscaled values from prototypes
     assign_mileages(plan, form_data)
+    # scale_days(plan) # Scale days in each week by weekly milage
 
     return plan
 
