@@ -29,7 +29,7 @@ base_week = {
 rest_week = {
     0: {
         "dist": 16,
-        "longrun": true
+        "attributes": ['longrun']
     },
     1: {
         "dist": 0

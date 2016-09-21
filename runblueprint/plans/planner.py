@@ -6,6 +6,7 @@ import uuid
 
 from dateutil.relativedelta import *
 from dateutil.rrule import *
+from .prototypes import weeks as week_protos
 
 
 
@@ -13,6 +14,9 @@ class Plan():
     def __init__(self, weeks):
         self.id = uuid.uuid1().hex
         self.weeks = weeks  # List of weeks
+        # Not sure how I want to design this yet
+        self.base_week_proto = week_protos.base_week
+        self.rest_week_proto = week_protos.rest_week
 
     def __str__(self):
         return 'Plan {}: {} weeks'.format(self.id, len(self.weeks))
@@ -30,7 +34,6 @@ class Plan():
         for i, week in enumerate(self.weeks):
             if week.title.lower() == title:
                 return i, week
-
 
 class Week():
     _WeekTypes = collections.namedtuple('WeekTypes', 'Base Growth Work Peak Taper Race')
@@ -53,7 +56,6 @@ class Week():
 
     def __str__(self):
         return 'Week {}: "{}" ({}, {} km)'.format(self.number, self.title, self.type, self.distance)
-
 
 class Day():
     def __init__(self, number, date):
