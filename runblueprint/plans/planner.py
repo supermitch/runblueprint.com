@@ -9,6 +9,7 @@ from dateutil.rrule import *
 from .prototypes import weeks as weekprototypes
 
 
+
 class Plan():
     def __init__(self, weeks):
         self.id = uuid.uuid1().hex
@@ -75,7 +76,7 @@ def generate_plan(form_data):
     determine_peak_week(plan, form_data)  # Sets peak week
     assign_week_types(plan, form_data)
     assign_mileages(plan, form_data)
-    build_week(plan)
+    assign_daily_distance(plan)
 
     return plan
 
@@ -98,8 +99,8 @@ def assign_mileages(plan, form_data):
         target_distance = (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
         week._target_distance = target_distance
 
-def build_week(plan):
-    """ Determine daily distance by based on weekly distance. """
+def assign_daily_distance(plan):
+    """ Determine daily distance through distance and prototype percent. """
     baseweekproto = weekprototypes.base_week
     restweekproto = weekprototypes.rest_week
 
