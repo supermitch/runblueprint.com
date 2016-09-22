@@ -6,7 +6,7 @@ import uuid
 
 from dateutil.relativedelta import *
 from dateutil.rrule import *
-from .prototypes import weeks as weekprototypes
+from .prototypes import weeks as week_prototypes
 
 
 
@@ -113,15 +113,11 @@ def assign_weekly_distance(plan, form_data):
 
 def assign_daily_distance(plan):
     """ Determine daily distance through distance and prototype percent. """
-    baseweekproto = weekprototypes.base_week
-    restweekproto = weekprototypes.rest_week
-
     for week in plan.weeks:
-        weekly_distance = week._target_distance
         for day in week.days:
-            dayoftheweek = day.number % 7
-            percent = baseweekproto[dayoftheweek]['percent_of_weekly_distance']
-            day.distance = weekly_distance * percent
+            day_of_the_week = day.number % 7  # TODO: Is this always true? Not all weeks start on Monday?
+            percent = week_prototypes.base_week[day_of_the_week]['percent_of_weekly_distance']
+            day.distance = week._target_distance * percent
 
 
 def determine_starting_mileage(form_data):
