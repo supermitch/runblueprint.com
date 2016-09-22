@@ -26,7 +26,8 @@ def _pdf(plan):
 def _txt(plan):
     output = str(plan)
     for week in plan.weeks:
-        output += '\n  ' + str(week)
+        output += '\n\n  ' + str(week)
         for day in week.days:
             output += '\n    ' + str(day)
     return output
+
