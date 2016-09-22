@@ -105,9 +105,8 @@ def assign_weekly_distance(plan, form_data):
     start_idx = 0
     peak_idx, _ = plan.get('peak week')
 
-    logging.warn((start_dist, peak_dist, start_idx, peak_idx))
     for i, week in enumerate(plan.weeks[:peak_idx + 1]):  # Fill in from weeks 0 to peak week
-        target_distance = (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
+        target_distance = start_dist + (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
         week._target_distance = target_distance
 
 
