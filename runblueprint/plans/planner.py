@@ -73,20 +73,31 @@ class Day():
 def generate_plan(form_data):
     plan = generate_blank_plan(form_data)
 
-    determine_peak_week(plan, form_data)  # Sets peak week
     assign_week_types(plan, form_data)
-    assign_mileages(plan, form_data)
+    assign_weekly_distance(plan, form_data)
     assign_daily_distance(plan)
 
     return plan
 
 
 def assign_week_types(plan, form_data):
+    # Deternmine Peak Week
+    peak_day = form_data.race_date + relativedelta(weeks=-form_data.taper_length)
+    for week in plan.weeks:
+        for day in week.days:
+            if day.date == peak_day:
+                week.title = 'peak week'
+
+    # Set Base weeks
     for week in plan.weeks:
         week.type = Week.Types.Base  # Temporarily ALL weeks are base weeks!
 
+    # Set Recovery weeks
+    for week in plan.weeks[-form_data.recovery_weeks:]:
+        week.type = Week.Types.Recovery
 
-def assign_mileages(plan, form_data):
+
+def assign_weekly_distance(plan, form_data):
     """ Assign weekly mileage targets to each of our plan's weeks. """
     start_dist = determine_starting_mileage(form_data)  # TODO: Week 0 might be a base phase and not actually use the "starting mileage" value
     peak_dist = determine_peak_mileage(form_data)
@@ -159,15 +170,6 @@ def determine_plan_start(plan_start, week_day_start):
     delta_days = (7 - int(week_day_start) - plan_start.isoweekday()) % 7
     start_day = plan_start - datetime.timedelta(delta_days)
     return start_day
-
-
-def determine_peak_week(plan, form_data):
-    peak_day = form_data.race_date + relativedelta(weeks=-form_data.taper_length)
-    for week in plan.weeks:
-        for day in week.days:
-            if day.date == peak_day:
-                week.title = 'peak week'
-                return week.number
 
 
 def add_recovery_block(race_date, recovery_weeks):
