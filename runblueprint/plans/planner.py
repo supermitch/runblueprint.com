@@ -52,7 +52,7 @@ class Week():
         return sum(x.time for x in self.days)
 
     def __str__(self):
-        return 'Week {}: "{}" ({}, {} km)'.format(self.number, self.title, self.type, self.distance)
+        return 'Week {}: "{}" ({}, {:.2f} km)'.format(self.number, self.title, self.type, self.distance)
 
 class Day():
     def __init__(self, number, date):
@@ -63,7 +63,7 @@ class Day():
         self.type = None  # Run type, e.g. Easy, Tempo
 
     def __str__(self):
-        return '{}. {} {}: {}'.format(self.number,
+        return '{}. {} {}: {:.2f}'.format(self.number,
             self.date.strftime('%Y-%m-%d'),
             self.date.strftime('%a'),
             self.distance)
@@ -98,6 +98,7 @@ def assign_mileages(plan, form_data):
     for i, week in enumerate(plan.weeks[:peak_idx + 1]):  # Fill in from weeks 0 to peak week
         target_distance = (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
         week._target_distance = target_distance
+
 
 def assign_daily_distance(plan):
     """ Determine daily distance through distance and prototype percent. """

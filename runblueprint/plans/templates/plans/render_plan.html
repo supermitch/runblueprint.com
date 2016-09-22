@@ -5,7 +5,7 @@
   <h3>Week {{ week.number }} - {{ week.title }}</h3>
     <ul>
     {% for day in week.days %}
-      <li>Day {{ day.number }}: {{ day.distance}}</li>
+      <li>Day {{ day.number }}: {{ day.distance|floatformat:2 }}</li>
     {% endfor %}
     </ul>
   {% endfor %}
