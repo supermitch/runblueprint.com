@@ -94,7 +94,7 @@ def assign_week_types(plan, form_data):
                 week.title = 'peak week'
                 peak_index = i
 
-    for week in plan.weeks[peak_index:peak_index + form_data.taper_length]:
+    for week in plan.weeks[peak_index + 1:peak_index + form_data.taper_length + 1]:
         week.type = Week.Types.Taper
 
     # Set Recovery weeks
