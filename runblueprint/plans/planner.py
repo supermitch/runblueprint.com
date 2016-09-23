@@ -52,7 +52,7 @@ class Week():
         return sum(x.time for x in self.days)
 
     def __str__(self):
-        return 'Week {}: "{}" ({}, {:.2f} km)'.format(self.number, self.title, self.type, self.distance)
+        return 'Week {}: "{}" ({}, {} km)'.format(self.number, self.title, self.type, math.ceil(self.distance))
 
 class Day():
     def __init__(self, number, date):
@@ -63,10 +63,10 @@ class Day():
         self.type = None  # Run type, e.g. Easy, Tempo
 
     def __str__(self):
-        return '{}. {} {}: {:.2f}'.format(self.number,
+        return '{}. {} {}: {}'.format(self.number,
             self.date.strftime('%Y-%m-%d'),
             self.date.strftime('%a'),
-            self.distance)
+            math.ceil(self.distance))
 
 
 
