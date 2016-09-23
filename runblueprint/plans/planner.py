@@ -81,16 +81,20 @@ def generate_plan(form_data):
 
 
 def assign_week_types(plan, form_data):
-    # Deternmine Peak Week
-    peak_day = form_data.race_date + relativedelta(weeks=-form_data.taper_length)
+    # Set Base weeks
     for week in plan.weeks:
+        week.type = Week.Types.Base  # Initially ALL weeks are base weeks!
+
+    # Determine Peak Week
+    peak_day = form_data.race_date + relativedelta(weeks=-form_data.taper_length)
+    for i, week in enumerate(plan.weeks):
         for day in week.days:
             if day.date == peak_day:
                 week.title = 'peak week'
+                peak_index = i
 
-    # Set Base weeks
-    for week in plan.weeks:
-        week.type = Week.Types.Base  # Temporarily ALL weeks are base weeks!
+    for week in plan.weeks[peak_index:peak_index + form_data.taper_length]:
+        week.type = Week.Types.Taper
 
     # Set Recovery weeks
     for week in plan.weeks[-form_data.recovery_weeks:]:
