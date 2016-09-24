@@ -20,7 +20,7 @@ You should only need to do these steps once:
 
 ```bash
 $ psql
-> CREATE USER <username> WITH ENCRYTED PASSWORD <password>;
+> CREATE USER <username> WITH ENCRYPTED PASSWORD <password>;
 > CREATE DATABASE <dbname> WITH OWNER <username>;
 > GRANT ALL PRIVILEGES ON DATABASE <dbname> TO <username>;
 ```
