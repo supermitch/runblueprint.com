@@ -1,25 +1,28 @@
 prototypes = {
-    "Base": {
+    'Base': {
         0: {  # Monday
-            'percent_of_weekly_distance': 0.0875
+            'percent_of_weekly_distance': 0.0875,
+            'type': 'easy'
         },
         1: {
             'percent_of_weekly_distance': 0.125,
-            'type': 'strides'
+            'type': 'easy + strides'
         },
         2: {
-            'percent_of_weekly_distance': 0.2
+            'percent_of_weekly_distance': 0.2,
+            'type': 'easy'
         },
         3: {
             'percent_of_weekly_distance': 0.1,
-            'type': 'strides'
+            'type': 'easy + strides'
         },
         4: {
             'percent_of_weekly_distance': 0,
             'type': 'x-train',
         },
         5: {
-            'percent_of_weekly_distance': 0.1
+            'percent_of_weekly_distance': 0.1,
+            'type': 'easy'
         },
         6: {
             'percent_of_weekly_distance': 0.4,
@@ -27,16 +30,16 @@ prototypes = {
         }
     },
 
-    "Rest": {
+    'Rest': {
         0: {  # Monday
-            'percent_of_weekly_distance': 0.0875
+            'percent_of_weekly_distance': 0.0875,
         },
         1: {
             'percent_of_weekly_distance': 0.125,
             'type': 'strides'
         },
         2: {
-            'percent_of_weekly_distance': 0.0
+            'percent_of_weekly_distance': 0.0,
         },
         3: {
             'percent_of_weekly_distance': 0.1,
@@ -47,23 +50,25 @@ prototypes = {
             'type': 'x-train',
         },
         5: {
-            'percent_of_weekly_distance': 0.1
+            'percent_of_weekly_distance': 0.1,
         },
         6: {
             'percent_of_weekly_distance': 0.2,
         }
     },
 
-    "Taper": {
+    'Taper': {
         0: {  # Monday
-            'percent_of_weekly_distance': 0.0875
+            'percent_of_weekly_distance': 0.0875,
+            'type': 'easy'
         },
         1: {
             'percent_of_weekly_distance': 0.125,
             'type': 'strides'
         },
         2: {
-            'percent_of_weekly_distance': 0.2
+            'percent_of_weekly_distance': 0.2,
+            'type': 'easy'
         },
         3: {
             'percent_of_weekly_distance': 0.1,
@@ -74,7 +79,8 @@ prototypes = {
             'type': 'x-train',
         },
         5: {
-            'percent_of_weekly_distance': 0.1
+            'percent_of_weekly_distance': 0.1,
+            'type': 'easy'
         },
         6: {
             'percent_of_weekly_distance': 0.4,
@@ -82,30 +88,34 @@ prototypes = {
         }
     },
 
-    "Recovery": {
+    'Recovery': {
         0: {  # Monday
-            'percent_of_weekly_distance': 0.0875
+            'percent_of_weekly_distance': 0.0875,
+            'type': 'recovery'
         },
         1: {
             'percent_of_weekly_distance': 0.125,
-            'type': 'strides'
+            'type': 'recovery'
         },
         2: {
-            'percent_of_weekly_distance': 0.0
+            'percent_of_weekly_distance': 0.0,
+            'type': 'rest'
         },
         3: {
             'percent_of_weekly_distance': 0.1,
-            'type': 'strides'
+            'type': 'easy'
         },
         4: {
             'percent_of_weekly_distance': 0,
             'type': 'x-train',
         },
         5: {
-            'percent_of_weekly_distance': 0.1
+            'percent_of_weekly_distance': 0.1,
+            'type': 'recovery'
         },
         6: {
             'percent_of_weekly_distance': 0.2,
+            'type': 'easy'
         }
     }
 }

@@ -61,13 +61,11 @@ class Day():
         self.date = date
         self.distance = 0
         self.time = 0
-        self.type = None  # Run type, e.g. Easy, Tempo
+        self.type = ''  # Run type, e.g. Easy, Tempo
 
     def __str__(self):
-        return '{}. {} {}: {}'.format(self.number,
-            self.date.strftime('%Y-%m-%d'),
-            self.date.strftime('%a'),
-            math.ceil(self.distance))
+        return '{}. {} {}: {} {}'.format(self.number, self.date.strftime('%Y-%m-%d'),
+            self.date.strftime('%a'), self.type, math.ceil(self.distance))
 
 
 
@@ -76,7 +74,7 @@ def generate_plan(form_data):
 
     assign_week_types(plan, form_data)
     assign_weekly_distance(plan, form_data)
-    assign_daily_distance(plan)
+    apply_week_prototypes(plan)
 
     return plan
 
@@ -115,14 +113,15 @@ def assign_weekly_distance(plan, form_data):
         week._target_distance = target_distance
 
 
-def assign_daily_distance(plan):
-    """ Determine daily distance through distance and prototype percent. """
+def apply_week_prototypes(plan):
+    """ Apply the weekly prototype data to the individual days, e.g. distance, type. """
     for week in plan.weeks:
         week_proto = weeks.prototypes[week.type]
         for day in week.days:
             day_of_the_week = day.number % 7
-            percent = week_proto[day_of_the_week]['percent_of_weekly_distance']
-            day.distance = week._target_distance * percent
+            day_proto = week_proto[day_of_the_week]
+            day.distance = week._target_distance * day_proto['percent_of_weekly_distance']
+            day.type = day_proto['type']
 
 
 def determine_starting_mileage(form_data):
