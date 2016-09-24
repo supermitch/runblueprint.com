@@ -137,9 +137,20 @@ def assign_weekly_distance(plan, form_data):
     start_idx = 0
     peak_idx, _ = plan.get('peak week')
 
+    # Set work volumes
+    # TODO: set distances differently for base & work phases
     for i, week in enumerate(plan.weeks[:peak_idx + 1]):  # Fill in from weeks 0 to peak week
         target_distance = start_dist + (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
         week._target_distance = target_distance
+
+    # Set recovery volumes
+    recovery_idx = 0
+    for week in plan.weeks:
+        if week.type == Week.Types.Recovery:
+            recovery_idx += 1
+            recovery_percent = {1: 0.20, 2: 0.36, 3: 0.43, 4: 0.50, 5: 0.59}[recovery_idx]
+            week._target_distance = recovery_percent * peak_dist
+
 
 
 def apply_week_prototypes(plan, form_data):
