@@ -53,7 +53,7 @@ class Week():
         return sum(x.time for x in self.days)
 
     def __str__(self):
-        return 'Week {}: "{}" ({}, {} km)'.format(self.number, self.title, self.type, math.ceil(self.distance))
+        return 'Week {}: {} - {} km'.format(self.number, self.title, math.ceil(self.distance))
 
 class Day():
     def __init__(self, number, date):
@@ -73,8 +73,9 @@ def generate_plan(form_data):
     plan = generate_blank_plan(form_data)
 
     assign_week_types(plan, form_data)
+    assign_week_titles(plan, form_data)
     assign_weekly_distance(plan, form_data)
-    apply_week_prototypes(plan)
+    apply_week_prototypes(plan, form_data)
 
     return plan
 
@@ -89,15 +90,43 @@ def assign_week_types(plan, form_data):
     for i, week in enumerate(plan.weeks):
         for day in week.days:
             if day.date == peak_day:
-                week.title = 'peak week'
                 peak_index = i
 
+    # TODO: Can we determine taper without knowing peak index?
     for week in plan.weeks[peak_index + 1:peak_index + form_data.taper_length + 1]:
         week.type = Week.Types.Taper
 
     # Set Recovery weeks
     for week in plan.weeks[-form_data.recovery_weeks:]:
         week.type = Week.Types.Recovery
+
+
+def assign_week_titles(plan, form_data):
+    """ Turn types into titles. """
+    counter = 0
+    last_type = None
+    for i, week in enumerate(plan.weeks):
+        try:
+            if week.type == last_type:  # If this week type is the same as the last
+                counter += 1
+                week.title = '{} week {}'.format(week.type.capitalize(), counter)
+            else:  # It's a new type, or the first week
+                counter = 1
+                if week.type == plan.weeks[i + 1].type:  # Only add a 1 if next week is a 2!
+                    week.title = week.type.capitalize() + ' week 1'
+                else:
+                    week.title = week.type.capitalize() + ' week'  # Just a single week gets no number
+            last_type = week.type
+        except IndexError:  # Don't agonize over array bounds
+            week.title = week.type.capitalize() + ' week'
+
+    # Determine Peak Week
+    # TODO: This calculation is happening twice. Fix that.
+    peak_day = form_data.race_date + relativedelta(weeks=-form_data.taper_length)
+    for i, week in enumerate(plan.weeks):
+        for day in week.days:
+            if day.date == peak_day:
+                week.title = 'Peak week'
 
 
 def assign_weekly_distance(plan, form_data):
@@ -113,7 +142,7 @@ def assign_weekly_distance(plan, form_data):
         week._target_distance = target_distance
 
 
-def apply_week_prototypes(plan):
+def apply_week_prototypes(plan, form_data):
     """ Apply the weekly prototype data to the individual days, e.g. distance, type. """
     for week in plan.weeks:
         week_proto = weeks.prototypes[week.type]
@@ -121,7 +150,10 @@ def apply_week_prototypes(plan):
             day_of_the_week = day.number % 7
             day_proto = week_proto[day_of_the_week]
             day.distance = week._target_distance * day_proto['percent_of_weekly_distance']
-            day.type = day_proto['type']
+            day.type = day_proto['type'].capitalize()
+
+            if day.date == form_data.race_date:
+                day.type = 'Race!'
 
 
 def determine_starting_mileage(form_data):
