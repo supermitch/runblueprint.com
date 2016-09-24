@@ -34,6 +34,7 @@ Every time you work you need to do these steps:
 * Run database migrations: `$ ./manage.py migrate --settings=runblueprint.local_settings`
   * Note that you need a `local_settings.py` file with your DB settings, at least!
 * Run local server: `$ ./manage.py runserver --settings=runblueprint.local_settings`
+  * (Or `make runserver`)
 
 Don't forget to freeze requirements if you installed new dependencies:
 
