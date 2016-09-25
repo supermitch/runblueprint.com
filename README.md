@@ -17,12 +17,14 @@ You should only need to do these steps once:
 
 * Install Postgresql 9.3+
 * Create user and database
+  * Note: User needs permission to create test DB (line 4)
 
 ```bash
 $ psql
 > CREATE USER <username> WITH ENCRYPTED PASSWORD <password>;
 > CREATE DATABASE <dbname> WITH OWNER <username>;
 > GRANT ALL PRIVILEGES ON DATABASE <dbname> TO <username>;
+> ALTER USER <username> CREATEDB;
 ```
 
 # Development
@@ -54,6 +56,7 @@ with the app and environment.
 Some handy shortcuts in the Makefile
 
 * Start development server: `$ make runserver`
+* Run tests: `$ make test`
 * Deploy to **Production**: `$ make deploy`
 
 
