@@ -7,7 +7,7 @@ import uuid
 from dateutil.relativedelta import *
 from dateutil.rrule import *
 
-from .prototypes import weeks
+from plans.prototypes import weeks
 
 
 
