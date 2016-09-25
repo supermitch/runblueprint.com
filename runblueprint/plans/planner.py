@@ -46,14 +46,14 @@ class Week():
 
     @property
     def distance(self):
-        return sum(x.distance for x in self.days)
+        return sum(day.distance for day in self.days)
 
     @property
     def time(self):
-        return sum(x.time for x in self.days)
+        return sum(day.time for day in self.days)
 
     def __str__(self):
-        return 'Week {}: {} - {} km'.format(self.number, self.title, math.ceil(self.distance))
+        return 'Week {}: {} - {:.1f} km'.format(self.number, self.title, self.distance)
 
 class Day():
     def __init__(self, number, date):
@@ -64,8 +64,8 @@ class Day():
         self.type = ''  # Run type, e.g. Easy, Tempo
 
     def __str__(self):
-        return '{}. {} {}: {} {}'.format(self.number, self.date.strftime('%Y-%m-%d'),
-            self.date.strftime('%a'), self.type, math.ceil(self.distance))
+        return '{}. {} {}: {} {:.1f}'.format(self.number, self.date.strftime('%Y-%m-%d'),
+            self.date.strftime('%a'), self.type, self.distance)
 
 
 
@@ -133,13 +133,12 @@ def assign_weekly_distance(plan, form_data):
     """ Assign weekly mileage targets to each of our plan's weeks. """
     start_dist = determine_starting_mileage(form_data)  # TODO: Week 0 might be a base phase and not actually use the "starting mileage" value
     peak_dist = determine_peak_mileage(form_data)
-
     start_idx = 0
     peak_idx, _ = plan.get('peak week')
 
     # Set work volumes
     # TODO: set distances differently for base & work phases
-    for i, week in enumerate(plan.weeks[:peak_idx + 1]):  # Fill in from weeks 0 to peak week
+    for i, week in enumerate(plan.weeks[:peak_idx + 1]):  # Fill in from weeks 0 to peak week, inclusive
         target_distance = start_dist + (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
         week._target_distance = target_distance
 
