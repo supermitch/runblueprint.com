@@ -39,7 +39,7 @@ prototypes = {
             'type': 'strides'
         },
         2: {
-            'percent_of_weekly_distance': 0.0,
+            'percent_of_weekly_distance': 0.2,
         },
         3: {
             'percent_of_weekly_distance': 0.1,
@@ -53,7 +53,7 @@ prototypes = {
             'percent_of_weekly_distance': 0.1,
         },
         6: {
-            'percent_of_weekly_distance': 0.2,
+            'percent_of_weekly_distance': 0.4,
         }
     },
 
@@ -98,7 +98,7 @@ prototypes = {
             'type': 'recovery'
         },
         2: {
-            'percent_of_weekly_distance': 0.0,
+            'percent_of_weekly_distance': 0.2,
             'type': 'rest'
         },
         3: {
@@ -114,7 +114,7 @@ prototypes = {
             'type': 'recovery'
         },
         6: {
-            'percent_of_weekly_distance': 0.2,
+            'percent_of_weekly_distance': 0.4,
             'type': 'easy'
         }
     }
