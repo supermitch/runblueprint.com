@@ -1,15 +1,14 @@
 class FormData():
     """
-    An object to act as an interface between the form
+    An object to act as an interface between the raw form
     data and the planner.
     """
     def __init__(self, raw_form_data):
         """ Take cleaned Django form data, save it, and assign it as attrs. """
         self.raw_data = raw_form_data
-        print(self.raw_data)
-        self.parse_raw_data()
+        self.parse_raw_data(self.raw_data)
 
-    def parse_raw_data(self):
+    def parse_raw_data(self, raw_data):
         """ Turn dict k:v pairs into instance attributes """
         ints = [
             'race_distance',
@@ -21,7 +20,7 @@ class FormData():
             'taper_length',
             'recovery_weeks',
         ]
-        for key, value in self.raw_data.items():
+        for key, value in raw_data.items():
             if value is not None and key in ints:
                 value = int(value)
             setattr(self, key, value)

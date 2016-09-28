@@ -169,7 +169,6 @@ def apply_week_prototypes(plan, form_data):
 def determine_starting_mileage(form_data):
     """
     Starting mileage is equal to steady mileage.
-
     Depends on: steady_mileage
     """
     return form_data.steady_mileage if form_data.steady_mileage is not None else 40
@@ -178,7 +177,6 @@ def determine_starting_mileage(form_data):
 def determine_peak_mileage(form_data):
     """
     Peak mileage is the max of 100 miles or the race_distance, whichever is smaller.
-
     Depends on: race_distance
     """
     return max(160, form_data.race_distance)
