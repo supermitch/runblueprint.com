@@ -1,8 +1,9 @@
 from django.test import TestCase
+
 from plans.planner import Plan, Week
 
 
-class PlanTestCase(TestCase):
+class TestPlanMethods(TestCase):
     def setUp(self):
         weeks = []
         for i in range(4):
