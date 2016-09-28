@@ -2,6 +2,8 @@
 
 Running training plan generator.
 
+See Trello project at https://trello.com/b/X6Fg9XVA/runblueprint
+
 # Installation
 
 You should only need to do these steps once:
