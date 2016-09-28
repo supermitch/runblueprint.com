@@ -27,7 +27,7 @@ class Plan():
     def time(self):
         return sum(x.time for x in self.weeks)
 
-    def get(self, title):
+    def get_by_title(self, title):
         """ Find a week by title, return (index, week) tuple. """
         for i, week in enumerate(self.weeks):
             if week.title.lower() == title:
@@ -36,6 +36,10 @@ class Plan():
     def count_weeks_by_type(self, type):
         """ Count number of weeks for a given type. """
         return sum(1 for x in self.weeks if x.type == getattr(Week.Types, type))
+
+    def get_weeks_by_type(self, type):
+        """ Return list of (index, week) tuples of weeks of a given type. """
+        return [(i, x) for i, x in enumerate(self.weeks) if x.type == getattr(Week.Types, type)]
 
 
 class Week():
@@ -138,8 +142,9 @@ def assign_weekly_distance(plan, form_data):
     """ Assign weekly mileage targets to each of our plan's weeks. """
     start_dist = determine_starting_mileage(form_data)  # TODO: Week 0 might be a base phase and not actually use the "starting mileage" value
     peak_dist = determine_peak_mileage(form_data)
+
     start_idx = 0
-    peak_idx, _ = plan.get('peak week')
+    peak_idx, _ = plan.get_by_title('peak week')
 
     # Set work volumes
     # TODO: set distances differently for base & work phases
@@ -148,12 +153,23 @@ def assign_weekly_distance(plan, form_data):
         week._target_distance = target_distance
 
     # Set taper volumes
-    taper_idx = 0
-    for week in plan.weeks:
+    taper_count = plan.count_weeks_by_type(Week.Types.Taper)
+    if taper_count == 4:
+        taper_percents = {1: 0.60, 2: 0.80, 3: 0.60, 4: 0.25}
+    elif taper_count == 3:
+        taper_percents = {1: 0.75, 2: 0.50, 3: 0.25}
+    elif taper_count == 2:
+        taper_percents = {1: 0.20, 2: 0.20}
+    elif taper_count == 1:
+        taper_percents = {1: 0.10}
+    else:
+        raise ValueError('Invalid number of taper weeks ({}). Must be from 0 to 4 weeks'.format(taper_count))
+
+    for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week.Types.Taper), start=1):
         if week.type == Week.Types.Recovery:
-            recovery_idx += 1
-            recovery_percent = {1: 0.20, 2: 0.36, 3: 0.43, 4: 0.50, 5: 0.59}[recovery_idx]
-            week._target_distance = recovery_percent * peak_dist
+            taper_percent = taper_percents[idx]
+            week._target_distance = taper_percent * peak_dist
+
     # Set recovery volumes
     recovery_idx = 0
     for week in plan.weeks:
