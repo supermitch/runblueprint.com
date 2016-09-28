@@ -2,7 +2,7 @@
 
 test:
 	. venv/bin/activate; \
-	./manage.py test --settings=runblueprint.local_settings;
+	./manage.py test -v 2 --settings=runblueprint.local_settings;
 
 runserver:
 	. venv/bin/activate; \
