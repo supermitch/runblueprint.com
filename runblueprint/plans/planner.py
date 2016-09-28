@@ -33,6 +33,11 @@ class Plan():
             if week.title.lower() == title:
                 return i, week
 
+    def count_weeks_by_type(self, type):
+        """ Count number of weeks for a given type. """
+        return sum(1 for x in self.weeks if x.type == getattr(Week.Types, type))
+
+
 class Week():
     WeekTypes = ('Base', 'Growth', 'Work', 'Peak', 'Taper', 'Race', 'Recovery')
     Types = collections.namedtuple('WeekTypes', WeekTypes)(*WeekTypes)  # Define constants for Week Types
@@ -142,6 +147,13 @@ def assign_weekly_distance(plan, form_data):
         target_distance = start_dist + (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
         week._target_distance = target_distance
 
+    # Set taper volumes
+    taper_idx = 0
+    for week in plan.weeks:
+        if week.type == Week.Types.Recovery:
+            recovery_idx += 1
+            recovery_percent = {1: 0.20, 2: 0.36, 3: 0.43, 4: 0.50, 5: 0.59}[recovery_idx]
+            week._target_distance = recovery_percent * peak_dist
     # Set recovery volumes
     recovery_idx = 0
     for week in plan.weeks:
