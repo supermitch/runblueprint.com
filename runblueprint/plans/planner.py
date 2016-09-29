@@ -169,14 +169,9 @@ def assign_weekly_distance(plan, form_data):
         taper_percent = taper_percents[idx]
         week._target_distance = taper_percent * peak_dist
 
-    # Set recovery volumes
-    recovery_idx = 0
-    for week in plan.weeks:
-        if week.type == Week.Types.Recovery:
-            recovery_idx += 1
-            recovery_percent = {1: 0.20, 2: 0.36, 3: 0.43, 4: 0.50, 5: 0.59}[recovery_idx]
-            week._target_distance = recovery_percent * peak_dist
-
+    for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week.Types.Recovery), start=1):
+        recovery_percent = {1: 0.20, 2: 0.36, 3: 0.43, 4: 0.50, 5: 0.59}[idx]
+        week._target_distance = recovery_percent * peak_dist
 
 
 def apply_week_prototypes(plan, form_data):
