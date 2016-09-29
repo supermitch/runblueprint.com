@@ -166,9 +166,8 @@ def assign_weekly_distance(plan, form_data):
         raise ValueError('Invalid number of taper weeks ({}). Must be from 0 to 4 weeks'.format(taper_count))
 
     for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week.Types.Taper), start=1):
-        if week.type == Week.Types.Recovery:
-            taper_percent = taper_percents[idx]
-            week._target_distance = taper_percent * peak_dist
+        taper_percent = taper_percents[idx]
+        week._target_distance = taper_percent * peak_dist
 
     # Set recovery volumes
     recovery_idx = 0
