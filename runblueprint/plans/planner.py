@@ -90,10 +90,6 @@ def generate_plan(form_data):
 
 
 def assign_week_types(plan, form_data):
-    # Set Base weeks
-    for week in plan.weeks:
-        week.type = Week.Types.Base  # Initially ALL weeks are base weeks!
-
     # Determine Peak Week
     peak_day = form_data.race_date + relativedelta(weeks=-form_data.taper_length)
     for i, week in enumerate(plan.weeks):
@@ -102,8 +98,23 @@ def assign_week_types(plan, form_data):
                 peak_index = i
 
     # TODO: Can we determine taper without knowing peak index?
-    for week in plan.weeks[peak_index + 1:peak_index + form_data.taper_length + 1]:
-        week.type = Week.Types.Taper
+    for i in range(peak_index + 1, peak_index + form_data.taper_length + 1):
+        plan.weeks[i].type = Week.Types.Taper
+
+    # Set work weeks
+    # TODO: This code sucks
+    work_count = 0
+    for i in range(peak_index, 0, -1):  # Work backwards towards week 0
+        plan.weeks[i].type = Week.Types.Work
+        work_count += 1
+        if work_count > (18 - form_data.taper_length):
+            break
+
+    # Set Base weeks
+    for i in range(peak_index, -1, -1):  # Work backwards towards week 0
+        # TODO: This code sucks
+        if plan.weeks[i].type != Week.Types.Work:  # Skip over work wees
+            plan.weeks[i].type = Week.Types.Base
 
     # Set Recovery weeks
     for week in plan.weeks[-form_data.recovery_weeks:]:

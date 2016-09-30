@@ -30,6 +30,37 @@ prototypes = {
         }
     },
 
+    'Work': {
+        0: {  # Monday
+            'percent_of_weekly_distance': 0.0875,
+            'type': 'easy'
+        },
+        1: {
+            'percent_of_weekly_distance': 0.125,
+            'type': 'easy + strides'
+        },
+        2: {
+            'percent_of_weekly_distance': 0.2,
+            'type': 'intervals'  # TODO: Or hills, or Tempo... How?
+        },
+        3: {
+            'percent_of_weekly_distance': 0.1,
+            'type': 'recovery'
+        },
+        4: {
+            'percent_of_weekly_distance': 0,
+            'type': 'x-train',
+        },
+        5: {
+            'percent_of_weekly_distance': 0.1,
+            'type': 'easy'
+        },
+        6: {
+            'percent_of_weekly_distance': 0.4,
+            'type': 'long',
+        }
+    },
+
     'Rest': {
         0: {  # Monday
             'percent_of_weekly_distance': 0.0875,
