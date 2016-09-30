@@ -10,6 +10,9 @@ from dateutil.rrule import *
 from plans.prototypes import weeks
 
 
+logger = logging.getLogger(__file__)
+logger.setLevel(logging.DEBUG)
+
 
 class Plan():
     def __init__(self, weeks):
@@ -188,7 +191,11 @@ def assign_weekly_distance(plan, form_data):
 def apply_week_prototypes(plan, form_data):
     """ Apply the weekly prototype data to the individual days, e.g. distance, type. """
     for week in plan.weeks:
-        week_proto = weeks.prototypes[week.type]
+        try:
+            week_proto = weeks.prototypes[week.type]
+        except KeyError:
+            logger.warn('Could not find key <{}> in Weekly prototypes. Using Base.'.format(week.type))
+            week_proto = weeks.prototypes[Week.Types.Base]
         for day in week.days:
             day_of_the_week = day.number % 7
             day_proto = week_proto[day_of_the_week]
