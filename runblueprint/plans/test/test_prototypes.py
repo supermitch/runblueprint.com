@@ -13,7 +13,7 @@ class TestPrototypes(TestCase):
     def test_percentage_sums(self):
         for name, week in weeks.prototypes.items():
             result = sum(proto['percent_of_weekly_distance'] for proto in week.values())
-            self.assertAlmostEqual(result, 1, places=1, msg='while testing <{}> week'.format(name))
+            self.assertAlmostEqual(result, 1, places=3, msg='while testing <{}> week'.format(name))
 
     def test_number_of_days(self):
         for name, week in weeks.prototypes.items():

@@ -1,7 +1,7 @@
 prototypes = {
     'Base': {
         0: {  # Monday
-            'percent_of_weekly_distance': 0.0875,
+            'percent_of_weekly_distance': 0.075,
             'type': 'easy'
         },
         1: {
@@ -32,7 +32,7 @@ prototypes = {
 
     'Work': {
         0: {  # Monday
-            'percent_of_weekly_distance': 0.0875,
+            'percent_of_weekly_distance': 0.075,
             'type': 'easy'
         },
         1: {
@@ -63,7 +63,7 @@ prototypes = {
 
     'Rest': {
         0: {  # Monday
-            'percent_of_weekly_distance': 0.0875,
+            'percent_of_weekly_distance': 0.075,
         },
         1: {
             'percent_of_weekly_distance': 0.125,
@@ -90,7 +90,7 @@ prototypes = {
 
     'Taper': {
         0: {  # Monday
-            'percent_of_weekly_distance': 0.0875,
+            'percent_of_weekly_distance': 0.075,
             'type': 'easy'
         },
         1: {
@@ -121,7 +121,7 @@ prototypes = {
 
     'Recovery': {
         0: {  # Monday
-            'percent_of_weekly_distance': 0.0875,
+            'percent_of_weekly_distance': 0.075,
             'type': 'recovery'
         },
         1: {
