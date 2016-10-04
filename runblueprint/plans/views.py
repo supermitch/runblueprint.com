@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from .forms import PlanForm
 from . import planner, persister, renderer
 from .formdata import FormData
+from .models import Runner, Plan
 
 
 def index(request):
