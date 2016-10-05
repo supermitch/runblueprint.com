@@ -1,5 +1,9 @@
 .PHONY: test
 
+migrate:
+	. venv/bin/activate; \
+	./manage.py migrate --settings=runblueprint.local_settings;
+
 test:
 	. venv/bin/activate; \
 	./manage.py test -v 2 --settings=runblueprint.local_settings;
