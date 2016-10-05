@@ -57,8 +57,9 @@ with the app and environment.
 
 Some handy shortcuts in the Makefile
 
-* Start development server: `$ make runserver`
-* Run tests: `$ make test`
-* Deploy to **Production**: `$ make deploy`
+* `$ make runserver` - Start development server
+* `$ make test` - Run tests
+* `$ make deploy` - Deploy to **Production**
+* `$ make migrate` - Run migrations
 
 
