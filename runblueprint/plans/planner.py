@@ -151,6 +151,11 @@ def assign_week_titles(plan, form_data):
             if day.date == peak_day:
                 week.title = 'Peak week'
 
+    # Determine Race Week
+    for week in plan.weeks:
+        for day in week.days:
+            if day.date == form_data.race_date:
+                week.title = 'Race week'
 
 def assign_weekly_distance(plan, form_data):
     """ Assign weekly mileage targets to each of our plan's weeks. """
