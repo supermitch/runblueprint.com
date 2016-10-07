@@ -109,9 +109,9 @@ def assign_week_types(plan, form_data):
     work_count = 0
     for i in range(peak_index, 0, -1):  # Work backwards towards week 0
         plan.weeks[i].type = Week.Types.Work
-        work_count += 1
         if work_count > (18 - form_data.taper_length):
             break
+        work_count += 1
 
     # Set Base weeks
     for i in range(peak_index, -1, -1):  # Work backwards towards week 0
