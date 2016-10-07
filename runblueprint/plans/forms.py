@@ -29,33 +29,10 @@ class PlanForm(forms.Form):
     race_date = forms.DateField(initial=date_utils.six_months,
         help_text='(yyyy-mm-dd)')
     race_distance = forms.IntegerField(initial=100)
-    race_units = forms.ChoiceField(label='Units', choices=UNITS,
-        initial=WEEKENDS[0][0])
-    race_terrain = forms.ChoiceField(choices=TERRAINS,
-        initial=TERRAINS[1][0],
-        widget=forms.RadioSelect,
-        disabled=True)
-    expected_time = forms.CharField(label='Expected completion time',
-        required=False,
-        help_text='e.g. 23:59:59')
 
     # Running ability
-    steady_mileage = forms.IntegerField(required=False)
-    peak_mileage = forms.IntegerField(required=False)
-    year_mileage = forms.IntegerField(label='Total year mileage',
-        required=False)
-    three_month_mileage = forms.IntegerField(
-        required=False)
-
-    longest_distance = forms.IntegerField(label='Longest distance',
-        required=False)
-    # TODO: Longest distance duration
-    longest_distance_units = forms.ChoiceField(label='Units',
-        choices=UNITS,
-        initial=WEEKENDS[0][0])
-    ten_km_pr = forms.CharField(label='10k PR',
-        help_text='e.g. 38:27',
-        required=False)
+    steady_mileage = forms.IntegerField(initial=40, required=False,
+            help_text='Weekly mileage you could handle without overuse injuries')
 
     # Schedule
     plan_start = forms.DateField(label='Training start date',
@@ -63,29 +40,6 @@ class PlanForm(forms.Form):
         initial=datetime.date.today)
     week_day_start = forms.ChoiceField(choices=WEEKDAYS,
         initial=WEEKDAYS[0][0],
-        required=False,
-        disabled=True)
-    long_run_day = forms.ChoiceField(choices=WEEKENDS,
-        initial=WEEKENDS[0][0],
-        widget=forms.RadioSelect,
-        required=False,
-        disabled=True)
-    days_off = forms.MultipleChoiceField(choices=WEEKDAYS,
-        initial=(WEEKDAYS[4][0],),
-        widget=forms.CheckboxSelectMultiple,
-        help_text='Days you <em>absolutely</em> cannot run',
-        required=False,
-        disabled=True)
-    double_days = forms.MultipleChoiceField(choices=WEEKDAYS,
-        help_text='Preferred days for doubles',
-        initial=(WEEKDAYS[0][0], WEEKDAYS[3][0]),
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-        disabled=True)
-    crosstraining_days = forms.MultipleChoiceField(choices=WEEKDAYS,
-        help_text='Preferred days for cross-training',
-        initial=(WEEKDAYS[1][0],),
-        widget=forms.CheckboxSelectMultiple,
         required=False,
         disabled=True)
     taper_length = forms.IntegerField(initial=3,
