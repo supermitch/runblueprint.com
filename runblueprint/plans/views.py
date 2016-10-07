@@ -13,9 +13,8 @@ def index(request):
         if form.is_valid():  # check whether it's valid
             form_data = FormData(form.cleaned_data)
             plan = planner.generate_plan(form_data)
-            request.session['plan_id'] = plan.id
 
-            print(renderer.render(plan, 'txt'))
+            request.session['plan_id'] = plan.id  # Save plan ID to session
 
             persister.persist(plan)  # Save plan to disk
 
@@ -26,9 +25,6 @@ def index(request):
 
     return render(request, 'plans/plan_form.html', {'form': form})
 
-
-def thanks(request):
-    return render(request, 'plans/thanks.html', {})
 
 def download(request):
     if 'plan_id' in request.session:
