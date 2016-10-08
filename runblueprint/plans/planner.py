@@ -88,6 +88,7 @@ def generate_plan(form_data):
     assign_week_titles(plan, form_data)
     assign_weekly_distance(plan, form_data)
     apply_week_prototypes(plan, form_data)
+    assign_daily_distances(plan, form_data)
 
     return plan
 
@@ -157,6 +158,7 @@ def assign_week_titles(plan, form_data):
             if day.date == form_data.race_date:
                 week.title = 'Race week'
 
+
 def assign_weekly_distance(plan, form_data):
     """ Assign weekly mileage targets to each of our plan's weeks. """
     start_dist = determine_starting_mileage(form_data)  # TODO: Week 0 might be a base phase and not actually use the "starting mileage" value
@@ -211,6 +213,15 @@ def apply_week_prototypes(plan, form_data):
                 day.type = 'Race!'
 
 
+def assign_daily_distances(plan, form_data):
+    """ Now that weeks are set, customize individual daily distances. """
+    for week in plan.weeks:
+        for day in week.days:
+            if day.date == form_data.race_date:  # TODO: is there an easier way to find a specific date?
+                day.distance = form_data.race_distance
+
+
+# TODO: Move to form_data module?
 def determine_starting_mileage(form_data):
     """
     Starting mileage is equal to steady mileage.
@@ -219,6 +230,7 @@ def determine_starting_mileage(form_data):
     return form_data.steady_mileage if form_data.steady_mileage is not None else 40
 
 
+# TODO: Move to form_data module?
 def determine_peak_mileage(form_data):
     """
     Peak mileage is the max of 100 miles or the race_distance, whichever is smaller.
@@ -240,6 +252,7 @@ def generate_blank_plan(form_data):
     return Plan(all_weeks)
 
 
+# TODO: Move to form_data module?
 def determine_plan_start(plan_start, week_day_start):
     """
     Calculate when the plan's first day is, given that week 1 must start on
