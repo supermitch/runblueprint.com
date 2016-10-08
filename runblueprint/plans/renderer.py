@@ -25,9 +25,13 @@ def _pdf(plan):
 
 def _txt(plan):
     output = str(plan)
+
+    max_width = max(len(day.type) for week in plan.weeks for day in week.days)
     for week in plan.weeks:
         output += '\n\n  ' + str(week)
         for day in week.days:
-            output += '\n    ' + str(day)
+            output += "\n {:>4}. {}  {}  {:<{fill}} {:>5.1f}".format(day.number,
+                day.date.strftime('%Y-%m-%d'), day.date.strftime('%a'),
+                day.type, day.distance, fill=max_width)
     return output
 
