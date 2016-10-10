@@ -217,6 +217,9 @@ def assign_daily_distances(plan, form_data):
     """ Now that weeks are set, customize individual daily distances. """
     for week in plan.weeks:
         for day in week.days:
+
+            day.distance = min(day.distance, determine_max_long_run(form_data))
+            # TODO: Now we need to redo the other run distances
             if day.date == form_data.race_date:  # TODO: is there an easier way to find a specific date?
                 day.distance = form_data.race_distance
 
@@ -237,6 +240,15 @@ def determine_peak_mileage(form_data):
     Depends on: race_distance
     """
     return max(160, form_data.race_distance)
+
+
+def determine_max_long_run(form_data):
+    if form_data.race_distance <= 50:
+        return 38  # ~ marathon training
+    elif form_data.race_distance <= 80:
+        return 42.2  # A full to make people feel good
+    else:
+        return 45
 
 
 def generate_blank_plan(form_data):
