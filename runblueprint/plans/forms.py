@@ -40,8 +40,7 @@ class PlanForm(forms.Form):
         initial=datetime.date.today)
     week_day_start = forms.ChoiceField(choices=WEEKDAYS,
         initial=WEEKDAYS[0][0],
-        required=False,
-        disabled=True)
+        required=True)
     taper_length = forms.IntegerField(initial=3,
         required=False,
         help_text='We recommend 2 or 3 weeks')
