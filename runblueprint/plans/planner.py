@@ -30,6 +30,12 @@ class Plan():
     def time(self):
         return sum(x.time for x in self.weeks)
 
+    @property
+    def days(self):
+        """ A handy generator of all plan days. """
+        return (day for week in self.weeks for day in week.days)
+
+
     def get_by_title(self, title):
         """ Find a week by title, return (index, week) tuple. """
         for i, week in enumerate(self.weeks):
@@ -43,6 +49,12 @@ class Plan():
     def get_weeks_by_type(self, type):
         """ Return list of (index, week) tuples of weeks of a given type. """
         return [(i, x) for i, x in enumerate(self.weeks) if x.type == getattr(Week.Types, type)]
+
+    def get_day_by_date(self, date):
+        for week in self.weeks:
+            for day in week.days:
+                if day.date == date:
+                    return day
 
 
 class Week():
@@ -215,21 +227,17 @@ def apply_week_prototypes(plan, form_data):
 
 def assign_daily_distances(plan, form_data):
     """ Now that weeks are set, customize individual daily distances. """
-    for week in plan.weeks:
-        for day in week.days:
-
-            day.distance = min(day.distance, determine_max_long_run(form_data))
-            # TODO: Now we need to redo the other run distances
-            if day.date == form_data.race_date:  # TODO: is there an easier way to find a specific date?
-                day.distance = form_data.race_distance
+    for day in plan.days:
+        day.distance = min(day.distance, determine_max_long_run(form_data))
+        # TODO: Now we need to redo the other run distances
+        if day.date == form_data.race_date:  # TODO: is there an easier way to find a specific date?
+            day.distance = form_data.race_distance
 
 
-# TODO: Move to form_data module?
 def determine_starting_mileage(form_data):
     return form_data.steady_mileage if form_data.steady_mileage is not None else 40
 
 
-# TODO: Move to form_data module?
 def determine_peak_mileage(form_data):
     return max(160, form_data.race_distance)
 
@@ -256,7 +264,6 @@ def generate_blank_plan(form_data):
     return Plan(all_weeks)
 
 
-# TODO: Move to form_data module?
 def determine_plan_start(plan_start, week_day_start):
     """
     Calculate when the plan's first day is, given that week 1 must start on
