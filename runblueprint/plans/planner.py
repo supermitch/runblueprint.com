@@ -15,12 +15,13 @@ logger.setLevel(logging.DEBUG)
 
 
 class Plan():
-    def __init__(self, weeks):
+    def __init__(self, name, weeks):
+        self.name = name
         self.id = uuid.uuid1().hex
         self.weeks = weeks  # List of weeks
 
     def __str__(self):
-        return 'Plan {}: {} weeks'.format(self.id, len(self.weeks))
+        return '{} {} Week Plan'.format(self.name, len(self.weeks))
 
     @property
     def distance(self):
@@ -235,7 +236,7 @@ def generate_blank_plan(form_data):
     all_dates = generate_plan_dates(start_date, end_date)
     all_days = list(Day(i, d) for i, d in enumerate(all_dates, start=1))
     all_weeks = list(Week(i, w) for i, w in enumerate(chunk_into_weeks(all_days), start=1))
-    return Plan(all_weeks)
+    return Plan(form_data.race_name, all_weeks)
 
 
 def determine_plan_start(plan_start, week_day_start):

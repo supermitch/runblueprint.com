@@ -23,7 +23,7 @@ TAPER_LENGTHS = [('1 week', '1 week'), ('2 weeks', '2 weeks'), ('3 weeks', '3 we
 class PlanForm(forms.Form):
 
     # Other
-    your_name = forms.CharField(required=False)
+    race_name = forms.CharField(required=False)
 
     # Race details
     race_date = forms.DateField(initial=date_utils.six_months,
