@@ -79,6 +79,7 @@ class Week():
     def __str__(self):
         return 'Week {}: {} - {:.1f} km'.format(self.number, self.title, self.distance)
 
+
 class Day():
     def __init__(self, number, date):
         self.number = number
@@ -107,10 +108,9 @@ def generate_plan(form_data):
 
 def assign_week_types(plan, form_data):
     # Determine Peak Week
-    peak_day = form_data.race_date + relativedelta(weeks=-form_data.taper_length)
     for i, week in enumerate(plan.weeks):
         for day in week.days:
-            if day.date == peak_day:
+            if day.date == form_data.peak_day:
                 peak_index = i
 
     # TODO: Can we determine taper without knowing peak index?
@@ -156,18 +156,11 @@ def assign_week_titles(plan, form_data):
         except IndexError:  # Don't agonize over array bounds
             week.title = week.type.capitalize() + ' week'
 
-    # Determine Peak Week
-    # TODO: This calculation is happening twice. Fix that.
-    peak_day = form_data.race_date + relativedelta(weeks=-form_data.taper_length)
     for i, week in enumerate(plan.weeks):
         for day in week.days:
-            if day.date == peak_day:
+            if day.date == form_data.peak_day:
                 week.title = 'Peak week'
-
-    # Determine Race Week
-    for week in plan.weeks:
-        for day in week.days:
-            if day.date == form_data.race_date:
+            elif day.date == form_data.race_date:
                 week.title = 'Race week'
 
 
