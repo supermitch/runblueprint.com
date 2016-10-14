@@ -13,7 +13,7 @@ class TestPlanMethods(TestCase):
             else:
                 week.type = Week.Types.Recovery
             weeks.append(week)
-        self.plan = Plan(weeks)
+        self.plan = Plan('Test Race', weeks)
 
     def test_count_weeks_by_type(self):
         result = self.plan.count_weeks_by_type(Week.Types.Taper)
