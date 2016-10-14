@@ -60,6 +60,7 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'runblueprint.urls'
+LOGIN_REDIRECT_URL = 'account'
 
 TEMPLATES = [
     {
