@@ -6,7 +6,7 @@ from plans.planner import Plan, Week
 class TestPlanMethods(TestCase):
     def setUp(self):
         weeks = []
-        for i in range(4):
+        for i in range(5):
             week = Week(i, [])  # Empty week
             if i < 2:
                 week.type = Week.Types.Taper
@@ -18,3 +18,6 @@ class TestPlanMethods(TestCase):
     def test_count_weeks_by_type(self):
         result = self.plan.count_weeks_by_type(Week.Types.Taper)
         self.assertEqual(result, 2)
+
+        result = self.plan.count_weeks_by_type('Recovery')  # Works with strings
+        self.assertEqual(result, 3)

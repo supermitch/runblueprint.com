@@ -49,7 +49,7 @@ class Plan():
 
     def get_weeks_by_type(self, type):
         """ Return list of (index, week) tuples of weeks of a given type. """
-        return [(i, x) for i, x in enumerate(self.weeks) if x.type == getattr(Week.Types, type)]
+        return [(i, x) for i, x in enumerate(self.weeks) if x.type == type]
 
     def get_day_by_date(self, date):
         for week in self.weeks:
