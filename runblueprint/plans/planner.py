@@ -231,7 +231,7 @@ def generate_blank_plan(form_data):
     A blank plan has all the days of training in it, including
     recovery block. But the no distances or workouts.
     """
-    start_date = determine_plan_start(form_data.plan_start, form_data.week_day_start)
+    start_date = determine_plan_start(form_data.plan_start, int(form_data.week_day_start))  # TODO: Form Data Type conversion
     end_date = add_recovery_block(form_data.race_date, form_data.recovery_weeks)
     all_dates = generate_plan_dates(start_date, end_date)
     all_days = list(Day(i, d) for i, d in enumerate(all_dates, start=1))
@@ -244,9 +244,9 @@ def determine_plan_start(plan_start, week_day_start):
     Calculate when the plan's first day is, given that week 1 must start on
     the specified week_day_start.
     """
-    delta_days = (7 - int(week_day_start) - plan_start.isoweekday()) % 7
-    start_day = plan_start - datetime.timedelta(delta_days)
-    return start_day
+    diff = plan_start.weekday() - week_day_start
+    delta_days = diff if diff >= 0 else 7 + diff
+    return plan_start - datetime.timedelta(delta_days)
 
 
 def add_recovery_block(race_date, recovery_weeks):
