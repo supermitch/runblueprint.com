@@ -10,19 +10,19 @@ class TestPlannerFunctions(SimpleTestCase):
         pass
 
     def test_determine_plan_start_before(self):
-        plan_start = datetime.date('2016', '10', '11')  # Tuesday
+        plan_start = datetime.date(2016, 10, 11)  # Tuesday
         week_day_start = '4'  # Thursday
         start_date = determine_plan_start(plan_start, week_day_start)
         self.assertEqual(start_date, '2016-10-10')
 
     def test_determine_plan_start_after(self):
-        plan_start = datetime.date('2016', '10', '11')  # Tuesday
+        plan_start = datetime.date(2016, 10, 11)  # Tuesday
         week_day_start = '0'  # Monday
         start_date = determine_plan_start(plan_start, week_day_start)
         self.assertEqual(start_date, '2016-10-10')
 
     def test_determine_plan_start_exact(self):
-        plan_start = datetime.date('2016', '10', '10')  # Monday
+        plan_start = datetime.date(2016, 10, 10)  # Monday
         week_day_start = '0'  # Monday
-        start_date = determine_plan_start(self.form_data.plan_start, self.form_data.week_day_start)
+        start_date = determine_plan_start(plan_start, week_day_start)
         self.assertEqual(start_date, '2016-10-10')
