@@ -8,6 +8,7 @@ from .forms import PlanForm
 from . import planner, persister, renderer
 from .formdata import FormData
 from .models import Plan
+from django.conf import settings
 
 
 def index(request):
@@ -31,7 +32,11 @@ def index(request):
 
 def download(request):
     if 'plan_id' in request.session:
-        context = {'plan_id': request.session['plan_id']}
+        plan_id = request.session['plan_id']
+        plain_text = {'type': 'text', 'url':"{}{}.txt".format(settings.MEDIA_URL, plan_id)}
+        html = {'type': 'html', 'url':"{}{}.html".format(settings.MEDIA_URL, plan_id)}
+        plans = [plain_text, html]
+        context = {'plans': plans, 'plan_id': plan_id}
     else:
         context = {}
     return render(request, 'plans/download.html', context)

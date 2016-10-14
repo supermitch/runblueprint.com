@@ -21,7 +21,7 @@
         <li><a href="{% url 'register' %}">Sign Up</a></li>
         <li><a href="{% url 'login' %}">Login</a></li>
         {% else %}
-        <li><a href="{% url 'account' %}">{{ user }}</a></li>
+        <li><a href="{% url 'account' %}">Hello, {{ user }}</a></li>
         <li><a href="{% url 'logout' %}">Logout</a></li>
         {% endif %}
       </ul>
