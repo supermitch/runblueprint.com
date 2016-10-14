@@ -26,7 +26,7 @@ def index(request):
     else:  # if a GET (or any other method) we'll create a blank form
         form = PlanForm()
 
-    return render(request, 'plans/plan_form.html', {'form': form})
+    return render(request, 'plans/plan_form.html', {'form': form, 'user': request.user})
 
 
 def download(request):
