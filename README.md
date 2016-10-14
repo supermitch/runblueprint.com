@@ -62,4 +62,11 @@ Some handy shortcuts in the Makefile
 * `$ make deploy` - Deploy to **Production**
 * `$ make migrate` - Run migrations
 
+## Create Superuser
 
+Instructions to create a user that can login to the admin site.
+
+* `$ source bin/venv/activate` - make sure you are in the virtual env
+* `$ ./manage.py createsuperuser --settings=runblueprint.local_settings` - run createsuperuser command
+* follow user creation prompts
+* test new superuser login [here on localhost](http://127.0.0.1:8000/admin/)
