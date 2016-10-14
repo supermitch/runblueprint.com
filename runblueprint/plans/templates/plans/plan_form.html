@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <div class="starter-template">
-        <form action="/plans/" method="POST">
+        <form action="/plans/" method="POST" class="enter-to-submit">
             {% csrf_token %}
             {% for field in form %}
                 <div class="form-group">
