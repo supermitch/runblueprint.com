@@ -32,8 +32,3 @@ def download(request):
     else:
         context = {}
     return render(request, 'plans/download.html', context)
-
-def signup(request):
-    if request.method == 'GET':
-        return render(request, 'plans/signup.html')
-
