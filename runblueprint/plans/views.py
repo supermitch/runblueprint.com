@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
+
 
 from .forms import PlanForm
 from . import planner, persister, renderer
@@ -32,3 +35,8 @@ def download(request):
     else:
         context = {}
     return render(request, 'plans/download.html', context)
+
+@login_required(login_url='/login/')
+def account(request):
+    context = RequestContext(request)
+    return render(request, 'registration/account.html', context)

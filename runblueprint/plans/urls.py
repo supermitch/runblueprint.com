@@ -13,4 +13,5 @@ urlpatterns = [
 
     url(r'^about/$', TemplateView.as_view(template_name='plans/about.html'), name='about'),
     url(r'^contact/$', TemplateView.as_view(template_name='plans/contact.html'), name='contact'),
+    url(r'^account/$', views.account, name='account'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # TODO: Development only?

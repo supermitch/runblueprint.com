@@ -21,7 +21,7 @@ from django.contrib.auth.forms import UserCreationForm
 urlpatterns = [
     url(r'^', include('plans.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('django.contrib.auth.urls')),
+    url('^', include('django.contrib.auth.urls')),
     url(r'^register/$', CreateView.as_view(
         template_name='registration/register.html',
         form_class=UserCreationForm,
