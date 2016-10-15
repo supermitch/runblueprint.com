@@ -191,8 +191,7 @@ def apply_week_prototypes(plan, form_data):
             logger.warn('Could not find key <{}> in Weekly prototypes. Using Base.'.format(week.type))
             week_proto = weeks.prototypes[Week.Types.Base]
         for day in week.days:
-            day_of_the_week = day.number % 7
-            day_proto = week_proto[day_of_the_week]
+            day_proto = week_proto[day.date.weekday()]  # e.g. Monday is 0
             day.distance = week._target_distance * day_proto['percent_of_weekly_distance']
             day.type = day_proto['type'].capitalize()
 
