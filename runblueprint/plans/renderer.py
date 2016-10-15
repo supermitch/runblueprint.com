@@ -30,8 +30,10 @@ def _txt(plan):
     for week in plan.weeks:
         output += '\n\n  ' + str(week)
         for day in week.days:
-            output += "\n {:>4}. {}  {}  {:<{fill}} {:>5.1f}".format(day.number,
-                day.date.strftime('%Y-%m-%d'), day.date.strftime('%a'),
-                day.type, day.distance, fill=max_width)
+            output += '\n {:>4}. {}  {}  {:<{fill}}'.format(day.number,
+                    day.date.strftime('%Y-%m-%d'), day.date.strftime('%a'),
+                    day.type, fill=max_width)
+            if day.distance > 0:
+                output += ' {:>5.1f}'.format(day.distance)
     return output
 
