@@ -62,6 +62,8 @@ class Week():
     WeekTypes = ('Base', 'Growth', 'Work', 'Taper', 'Race', 'Recovery')
     Types = collections.namedtuple('WeekTypes', WeekTypes)(*WeekTypes)  # Define constants for Week Types
 
+    Variants = collections.namedtuple('Variants', ('Rest',))(('Rest',))  # Define variants
+
     def __init__(self, number, days):
         self.number = number
         self.days = days  # List of days
@@ -141,7 +143,7 @@ def assign_week_titles(plan, form_data):
 
         if (i + 1) % 4 == 0:  # Every 4th week is a rest week
             if week.type in (Week.Types.Base, Week.Types.Work):  # Other phases have no rest weeks
-                week.variant = 'rest'
+                week.variant = Week.Variants.Rest
                 week.title += ' - Rest'
 
         for day in week.days:  # Set peak & race week
@@ -163,6 +165,8 @@ def assign_weekly_distance(plan, form_data):
     # TODO: set distances differently for base & work phases
     for i, week in enumerate(plan.weeks[:peak_idx + 1]):  # Fill in from weeks 0 to peak week, inclusive
         target_distance = start_dist + (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
+        if week.variant == Week.Variants.Rest:
+            target_distance *= 0.6  # Rest week is 60 %
         week._target_distance = target_distance
 
     # Set taper volumes
