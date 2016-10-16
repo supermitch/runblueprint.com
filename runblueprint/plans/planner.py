@@ -67,6 +67,7 @@ class Week():
         self.days = days  # List of days
         self.title = ''
         self.type = ''
+        self.variant = ''
         self._target_distance = 0  # Internal: planned distance for that week
 
     @property
@@ -138,8 +139,12 @@ def assign_week_titles(plan, form_data):
         except IndexError:  # Don't agonize over array bounds
             week.title = week.type.capitalize() + ' week'
 
-    for i, week in enumerate(plan.weeks):
-        for day in week.days:
+        if (i + 1) % 4 == 0:  # Every 4th week is a rest week
+            if week.type in (Week.Types.Base, Week.Types.Work):  # Other phases have no rest weeks
+                week.variant = 'rest'
+                week.title += ' - Rest'
+
+        for day in week.days:  # Set peak & race week
             if day.date == form_data.peak_day:
                 week.title = 'Peak week'
             elif day.date == form_data.race_date:
