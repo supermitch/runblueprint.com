@@ -41,7 +41,7 @@ prototypes = {
         },
         2: {
             'percent_of_weekly_distance': 0.2,
-            'type': 'intervals'  # TODO: Or hills, or Tempo... How?
+            'type': 'quality'
         },
         3: {
             'percent_of_weekly_distance': 0.1,
