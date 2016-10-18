@@ -60,7 +60,7 @@ class Plan():
 
 class Week():
     WeekTypes = ('Base', 'Growth', 'Work', 'Taper', 'Race', 'Recovery')
-    Types = collections.namedtuple('WeekTypes', WeekTypes)(*WeekTypes)  # Define constants for Week Types
+    Types = collections.namedtuple('WeekTypes', WeekTypes)(*WeekTypes)  # Define constants for types
 
     Variants = collections.namedtuple('Variants', ('Rest',))(('Rest',))  # Define variants
 
@@ -85,6 +85,9 @@ class Week():
 
 
 class Day():
+    DayTypes = ('Recovery', 'Easy', 'Long', 'Quality', 'Rest', 'Crosstrain')
+    Types = collections.namedtuple('DayTypes', DayTypes)(*DayTypes)  # Define constants types
+
     def __init__(self, number, date):
         self.number = number
         self.date = date
@@ -199,13 +202,30 @@ def apply_week_prototypes(plan, form_data):
         except KeyError:
             logger.warn('Could not find key <{}> in Weekly prototypes. Using Base.'.format(week.type))
             week_proto = weeks.prototypes[Week.Types.Base]
+
         for day in week.days:
             day_proto = week_proto[day.date.weekday()]  # e.g. Monday is 0
             day.distance = week._target_distance * day_proto['percent_of_weekly_distance']
-            day.type = day_proto['type'].capitalize()
+            day_type = day_proto['type'].lower()
+            day.type = {  # Convert types to actual. Is this pointless Java crap?
+                'rest': Day.Types.Rest,
+                'recovery': Day.Types.Recovery,
+                'easy': Day.Types.Easy,
+                'quality': Day.Types.Quality,
+                'long': Day.Types.Long,
+                'x-train': Day.Types.Crosstrain,
+            }.get(day_type, Day.Types.Easy)  # Default to Easy on err. TODO: Try-except-log
 
             if day.date == form_data.race_date:
                 day.type = 'Race!'
+
+
+def assign_quality(plan, form_data):
+    """ Turn day types into actual workouts. """
+    for day in plan.days:
+        if day.type == Day.Types.Quality:
+            # TODO: Do we need to know phases of the plan?
+            day.workout = 'What am I doing?'
 
 
 def assign_daily_distances(plan, form_data):
