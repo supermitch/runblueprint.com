@@ -67,14 +67,14 @@ prototypes = {
         },
         1: {
             'percent_of_weekly_distance': 0.125,
-            'type': 'strides'
+            'type': 'easy'
         },
         2: {
             'percent_of_weekly_distance': 0.2,
         },
         3: {
             'percent_of_weekly_distance': 0.1,
-            'type': 'strides'
+            'type': 'easy'
         },
         4: {
             'percent_of_weekly_distance': 0,
@@ -95,7 +95,7 @@ prototypes = {
         },
         1: {
             'percent_of_weekly_distance': 0.125,
-            'type': 'strides'
+            'type': 'easy'
         },
         2: {
             'percent_of_weekly_distance': 0.2,
@@ -103,7 +103,7 @@ prototypes = {
         },
         3: {
             'percent_of_weekly_distance': 0.1,
-            'type': 'strides'
+            'type': 'easy'
         },
         4: {
             'percent_of_weekly_distance': 0,
