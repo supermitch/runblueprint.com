@@ -59,8 +59,8 @@ class Plan():
 
 
 class Week():
-    WeekTypes = ('Base', 'Growth', 'Work', 'Taper', 'Race', 'Recovery')
-    Types = collections.namedtuple('WeekTypes', WeekTypes)(*WeekTypes)  # Define constants for types
+    week_types = ('Base', 'Growth', 'Work', 'Taper', 'Race', 'Recovery')
+    Types = collections.namedtuple('WeekTypes', week_types)(*week_types)  # Define constants for types
 
     Variants = collections.namedtuple('Variants', ('Rest',))(('Rest',))  # Define variants
 
@@ -85,8 +85,8 @@ class Week():
 
 
 class Day():
-    DayTypes = ('Recovery', 'Easy', 'Long', 'Quality', 'Rest', 'Crosstrain')
-    Types = collections.namedtuple('DayTypes', DayTypes)(*DayTypes)  # Define constants types
+    day_types = ('Recovery', 'Easy', 'Long', 'Quality', 'Rest', 'Crosstrain')
+    Types = collections.namedtuple('DayTypes', day_types)(*day_types)  # Define constants types
 
     def __init__(self, number, date):
         self.number = number
