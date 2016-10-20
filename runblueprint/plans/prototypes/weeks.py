@@ -18,7 +18,7 @@ prototypes = {
         },
         4: {
             'percent_of_weekly_distance': 0,
-            'type': 'x-train',
+            'type': 'crosstrain',
         },
         5: {
             'percent_of_weekly_distance': 0.1,
@@ -49,7 +49,7 @@ prototypes = {
         },
         4: {
             'percent_of_weekly_distance': 0,
-            'type': 'x-train',
+            'type': 'crosstrain',
         },
         5: {
             'percent_of_weekly_distance': 0.1,
@@ -78,7 +78,7 @@ prototypes = {
         },
         4: {
             'percent_of_weekly_distance': 0,
-            'type': 'x-train',
+            'type': 'crosstrain',
         },
         5: {
             'percent_of_weekly_distance': 0.1,
@@ -107,7 +107,7 @@ prototypes = {
         },
         4: {
             'percent_of_weekly_distance': 0,
-            'type': 'x-train',
+            'type': 'crosstrain',
         },
         5: {
             'percent_of_weekly_distance': 0.1,
@@ -138,7 +138,7 @@ prototypes = {
         },
         4: {
             'percent_of_weekly_distance': 0,
-            'type': 'x-train',
+            'type': 'crosstrain',
         },
         5: {
             'percent_of_weekly_distance': 0.1,
