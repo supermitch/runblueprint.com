@@ -1,9 +1,11 @@
 awsebcli==3.7.7
+beautifulsoup4==4.5.1
 blessed==1.9.5
 botocore==1.4.34
 cement==2.8.2
 colorama==0.3.7
 Django==1.9.6
+django-webtest==1.8.0
 docker-py==1.7.2
 dockerpty==0.4.1
 docopt==0.6.2
@@ -20,6 +22,9 @@ requests==2.9.1
 semantic-version==2.5.0
 six==1.10.0
 texttable==0.8.4
+waitress==1.0.0
 wcwidth==0.1.7
+WebOb==1.6.2
 websocket-client==0.37.0
+WebTest==2.0.23
 Werkzeug==0.11.9
