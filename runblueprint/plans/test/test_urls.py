@@ -6,6 +6,10 @@ class TestUrls(TestCase):
     def setUp(self):
         self.client = Client()  # Every test needs a client.
 
+    def test_home(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+
     # Plan URLS
     def test_plans(self):
         response = self.client.get('/plans/')
