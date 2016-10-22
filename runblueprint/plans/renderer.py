@@ -35,5 +35,6 @@ def _txt(plan):
                     day.type, fill=max_width)
             if day.distance > 0:
                 output += ' {:>5.1f}'.format(day.distance)
+            output += '  ' + day.workout
     return output
 

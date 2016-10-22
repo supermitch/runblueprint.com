@@ -94,6 +94,7 @@ class Day():
         self.distance = 0
         self.time = 0
         self.type = ''  # Run type, e.g. Easy, Tempo
+        self.workout = ''  # Workout details, e.g. '2 mi E + 4 x (2 min T ...'
 
     def __str__(self):
         return '{}. {} {}: {} {:.1f}'.format(self.number, self.date.strftime('%Y-%m-%d'),
@@ -108,6 +109,7 @@ def generate_plan(form_data):
     assign_week_titles(plan, form_data)
     assign_weekly_distance(plan, form_data)
     apply_week_prototypes(plan, form_data)
+    assign_quality(plan, form_data)
     assign_daily_distances(plan, form_data)
 
     return plan
@@ -228,8 +230,8 @@ def assign_quality(plan, form_data):
     """ Turn day types into actual workouts. """
     for day in plan.days:
         if day.type == Day.Types.Quality:
-            # TODO: Do we need to know phases of the plan?
-            day.workout = 'What am I doing?'
+            # TODO: decide phases of the plan
+            day.workout = 'warmup + workout + cooldown'
 
 
 def assign_daily_distances(plan, form_data):
