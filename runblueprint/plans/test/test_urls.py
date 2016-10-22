@@ -7,7 +7,7 @@ from plans import urls as plan_urls
 class TestUrls(TestCase):
     def setUp(self):
         self.longMessage = True
-        self.client = Client()  # Every test needs a client.
+        self.client = Client()  # Every test needs a client
 
 
     def test_status_codes_200(self):
@@ -15,4 +15,4 @@ class TestUrls(TestCase):
             if type(name) == str:
                 url = reverse(name)
                 response = self.client.get(url, follow=True)
-                self.assertEqual(response.status_code, 200, msg='URL <{}>'.format(url))
+                self.assertEqual(response.status_code, 200, msg='URL <{}>'.format(url))  # Follow redirects

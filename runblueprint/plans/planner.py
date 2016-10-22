@@ -214,10 +214,10 @@ def apply_week_prototypes(plan, form_data):
                     'easy': Day.Types.Easy,
                     'quality': Day.Types.Quality,
                     'long': Day.Types.Long,
-                    'x-train': Day.Types.Crosstrain,
+                    'crosstrain': Day.Types.Crosstrain,
                 }[day_type]
             except KeyError:
-                logger.warn('Bad day type <{}> in week proto <{}>'.format(day_type, week.type))
+                logger.warn('Unknown day type <{}> in week proto <{}>'.format(day_type, week.type))
                 day.type = Day.Types.Easy  # Default
 
             if day.date == form_data.race_date:
