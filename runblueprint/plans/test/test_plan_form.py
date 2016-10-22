@@ -1,5 +1,5 @@
 from django_webtest import WebTest
-# from django.urls import reverse
+
 from django.core.urlresolvers import reverse
 
 
