@@ -1,4 +1,4 @@
-workouts = {
+phases = [
     {
         'Title': 'Phase 1: Base & Endurance',
         'Tempo': [
@@ -59,4 +59,4 @@ workouts = {
             '4 x Run up a hill really fast',
         ],
     },
-}
+]
