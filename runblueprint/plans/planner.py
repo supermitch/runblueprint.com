@@ -59,6 +59,7 @@ class Plan():
 
 
 class Week():
+    # TODO: Enum class
     week_types = ('Base', 'Growth', 'Work', 'Taper', 'Race', 'Recovery')
     Types = collections.namedtuple('WeekTypes', week_types)(*week_types)  # Define constants for types
 
@@ -70,6 +71,7 @@ class Week():
         self.title = ''
         self.type = ''
         self.variant = ''
+        self.phase = None  # Mesocycle (int, 1-5)  # TODO: Use enum
         self._target_distance = 0  # Internal: planned distance for that week
 
     @property
@@ -81,10 +83,11 @@ class Week():
         return sum(day.time for day in self.days)
 
     def __str__(self):
-        return 'Week {}: {} - {:.1f} km'.format(self.number, self.title, self.distance)
+        return 'Week {}: {} - {:.1f} km - Phase {}'.format(self.number, self.title, self.distance, self.phase)
 
 
 class Day():
+    # TODO: Enum class
     day_types = ('Recovery', 'Easy', 'Long', 'Quality', 'Rest', 'Crosstrain')
     Types = collections.namedtuple('DayTypes', day_types)(*day_types)  # Define constants types
 
@@ -105,6 +108,7 @@ class Day():
 def generate_plan(form_data):
     plan = generate_blank_plan(form_data)
 
+    assign_phases(plan, form_data)
     assign_week_types(plan, form_data)
     assign_week_titles(plan, form_data)
     assign_weekly_distance(plan, form_data)
@@ -210,7 +214,7 @@ def apply_week_prototypes(plan, form_data):
             day.distance = week._target_distance * day_proto['percent_of_weekly_distance']
             day_type = day_proto['type'].lower()
             try:
-                day.type = {  # Convert types to actual. Is this pointless Java crap?
+                day.type = {  # TODO: Convert types to actual. Is this pointless Java crap?
                     'rest': Day.Types.Rest,
                     'recovery': Day.Types.Recovery,
                     'easy': Day.Types.Easy,
@@ -224,6 +228,22 @@ def apply_week_prototypes(plan, form_data):
 
             if day.date == form_data.race_date:
                 day.type = 'Race!'
+
+
+def assign_phases(plan, form_data):
+    """ Mesocyles are applied backwards as time permits. """
+    for i, week in enumerate(plan.weeks[::-1]):  # Work backwards
+        if i < form_data.recovery_weeks:
+            # TODO: Enum mesocyles
+            week.phase = 5  # TODO: Redundant with week type?
+        elif i < form_data.recovery_weeks + 6:
+            week.phase = 4  # Taper & Race
+        elif i < form_data.recovery_weeks + 12:
+            week.phase = 3  # Race Preparation
+        elif i < form_data.recovery_weeks + 18:
+            week.phase = 2  # Lactate Threshold
+        else:
+            week.phase = 1  # Base / Endurance
 
 
 def assign_quality(plan, form_data):
