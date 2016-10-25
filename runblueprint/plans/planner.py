@@ -1,5 +1,6 @@
 import collections
 import datetime
+import enum
 import logging
 import math
 import uuid
@@ -7,102 +8,14 @@ import uuid
 from dateutil.relativedelta import *
 from dateutil.rrule import *
 
+from plans.week import Week, Week_types, Week_variants
+from plans.plan import Plan, Phases
+from plans.day import Day, Day_types
 from plans.prototypes import weeks
 
 
 logger = logging.getLogger(__file__)
 logger.setLevel(logging.DEBUG)
-
-
-class Plan():
-    def __init__(self, name, weeks):
-        self.name = name
-        self.id = uuid.uuid1().hex
-        self.weeks = weeks  # List of weeks
-
-    def __str__(self):
-        return '{} {} Week Plan'.format(self.name, len(self.weeks))
-
-    @property
-    def distance(self):
-        return sum(x.distance for x in self.weeks)
-
-    @property
-    def time(self):
-        return sum(x.time for x in self.weeks)
-
-    @property
-    def days(self):
-        """ A handy generator of all plan days. """
-        return (day for week in self.weeks for day in week.days)
-
-
-    def get_by_title(self, title):
-        """ Find a week by title, return (index, week) tuple. """
-        for i, week in enumerate(self.weeks):
-            if week.title.lower() == title:
-                return i, week
-
-    def count_weeks_by_type(self, type):
-        """ Count number of weeks for a given type. """
-        return sum(1 for x in self.weeks if x.type == getattr(Week.Types, type))
-
-    def get_weeks_by_type(self, type):
-        """ Return list of (index, week) tuples of weeks of a given type. """
-        return [(i, x) for i, x in enumerate(self.weeks) if x.type == type]
-
-    def get_day_by_date(self, date):
-        for week in self.weeks:
-            for day in week.days:
-                if day.date == date:
-                    return day
-
-
-class Week():
-    # TODO: Enum class
-    week_types = ('Base', 'Growth', 'Work', 'Taper', 'Race', 'Recovery')
-    Types = collections.namedtuple('WeekTypes', week_types)(*week_types)  # Define constants for types
-
-    Variants = collections.namedtuple('Variants', ('Rest',))(('Rest',))  # Define variants
-
-    def __init__(self, number, days):
-        self.number = number
-        self.days = days  # List of days
-        self.title = ''
-        self.type = ''
-        self.variant = ''
-        self.phase = None  # Mesocycle (int, 1-5)  # TODO: Use enum
-        self._target_distance = 0  # Internal: planned distance for that week
-
-    @property
-    def distance(self):
-        return sum(day.distance for day in self.days)
-
-    @property
-    def time(self):
-        return sum(day.time for day in self.days)
-
-    def __str__(self):
-        return 'Week {}: {} - {:.1f} km - Phase {}'.format(self.number, self.title, self.distance, self.phase)
-
-
-class Day():
-    # TODO: Enum class
-    day_types = ('Recovery', 'Easy', 'Long', 'Quality', 'Rest', 'Crosstrain')
-    Types = collections.namedtuple('DayTypes', day_types)(*day_types)  # Define constants types
-
-    def __init__(self, number, date):
-        self.number = number
-        self.date = date
-        self.distance = 0
-        self.time = 0
-        self.type = ''  # Run type, e.g. Easy, Tempo
-        self.workout = ''  # Workout details, e.g. '2 mi E + 4 x (2 min T ...'
-
-    def __str__(self):
-        return '{}. {} {}: {} {:.1f}'.format(self.number, self.date.strftime('%Y-%m-%d'),
-            self.date.strftime('%a'), self.type, self.distance)
-
 
 
 def generate_plan(form_data):
@@ -122,13 +35,13 @@ def generate_plan(form_data):
 def assign_week_types(plan, form_data):
     for i, week in enumerate(plan.weeks[::-1]):  # Work backwards
         if i < form_data.recovery_weeks:
-            week.type = Week.Types.Recovery
+            week.type = Week_types.Recovery
         elif i < form_data.recovery_weeks + form_data.taper_length:
-            week.type = Week.Types.Taper
+            week.type = Week_types.Taper
         elif i < form_data.recovery_weeks + form_data.taper_length + 18:
-            week.type = Week.Types.Work
+            week.type = Week_types.Work
         else:
-            week.type = Week.Types.Base
+            week.type = Week_types.Base
 
 
 def assign_week_titles(plan, form_data):
@@ -139,20 +52,20 @@ def assign_week_titles(plan, form_data):
         try:
             if week.type == last_type:  # If this week type is the same as the last
                 counter += 1
-                week.title = '{} week {}'.format(week.type.capitalize(), counter)
+                week.title = '{} week {}'.format(week.type.name.capitalize(), counter)
             else:  # It's a new type, or the first week
                 counter = 1
                 if week.type == plan.weeks[i + 1].type:  # Only add a 1 if next week is a 2!
-                    week.title = week.type.capitalize() + ' week 1'
+                    week.title = week.type.name.capitalize() + ' week 1'
                 else:
-                    week.title = week.type.capitalize() + ' week'  # Just a single week gets no number
+                    week.title = week.type.name.capitalize() + ' week'  # Just a single week gets no number
             last_type = week.type
         except IndexError:  # Don't agonize over array bounds
             week.title = week.type.capitalize() + ' week'
 
         if (i + 1) % 4 == 0:  # Every 4th week is a rest week
-            if week.type in (Week.Types.Base, Week.Types.Work):  # Other phases have no rest weeks
-                week.variant = Week.Variants.Rest
+            if week.type in (Week_types.Base, Week_types.Work):  # Other phases have no rest weeks
+                week.variant = Week_variants.Rest
                 week.title += ' - Rest'
 
         for day in week.days:  # Set peak & race week
@@ -174,12 +87,12 @@ def assign_weekly_distance(plan, form_data):
     # TODO: set distances differently for base & work phases
     for i, week in enumerate(plan.weeks[:peak_idx + 1]):  # Fill in from weeks 0 to peak week, inclusive
         target_distance = start_dist + (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
-        if week.variant == Week.Variants.Rest:
+        if week.variant == Week_variants.Rest:
             target_distance *= 0.6  # Rest week is 60 %
         week._target_distance = target_distance
 
     # Set taper volumes
-    taper_count = plan.count_weeks_by_type(Week.Types.Taper)
+    taper_count = plan.count_weeks_by_type(Week_types.Taper)
     if taper_count == 4:
         taper_percents = {1: 0.60, 2: 0.80, 3: 0.60, 4: 0.25}
     elif taper_count == 3:
@@ -191,11 +104,11 @@ def assign_weekly_distance(plan, form_data):
     else:
         raise ValueError('Invalid number of taper weeks ({}). Must be from 0 to 4 weeks'.format(taper_count))
 
-    for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week.Types.Taper), start=1):
+    for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week_types.Taper), start=1):
         taper_percent = taper_percents[idx]
         week._target_distance = taper_percent * peak_dist
 
-    for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week.Types.Recovery), start=1):
+    for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week_types.Recovery), start=1):
         recovery_percent = {1: 0.20, 2: 0.36, 3: 0.43, 4: 0.50, 5: 0.59}[idx]
         week._target_distance = recovery_percent * peak_dist
 
@@ -207,7 +120,7 @@ def apply_week_prototypes(plan, form_data):
             week_proto = weeks.prototypes[week.type]
         except KeyError:
             logger.warn('Could not find key <{}> in Weekly prototypes. Using Base.'.format(week.type))
-            week_proto = weeks.prototypes[Week.Types.Base]
+            week_proto = weeks.prototypes[Week_types.Base]
 
         for day in week.days:
             day_proto = week_proto[day.date.weekday()]  # e.g. Monday is 0
@@ -215,16 +128,16 @@ def apply_week_prototypes(plan, form_data):
             day_type = day_proto['type'].lower()
             try:
                 day.type = {  # TODO: Convert types to actual. Is this pointless Java crap?
-                    'rest': Day.Types.Rest,
-                    'recovery': Day.Types.Recovery,
-                    'easy': Day.Types.Easy,
-                    'quality': Day.Types.Quality,
-                    'long': Day.Types.Long,
-                    'crosstrain': Day.Types.Crosstrain,
+                    'rest': Day_types.Rest,
+                    'recovery': Day_types.Recovery,
+                    'easy': Day_types.Easy,
+                    'quality': Day_types.Quality,
+                    'long': Day_types.Long,
+                    'crosstrain': Day_types.Crosstrain,
                 }[day_type]
             except KeyError:
                 logger.warn('Unknown day type <{}> in week proto <{}>'.format(day_type, week.type))
-                day.type = Day.Types.Easy  # Default
+                day.type = Day_types.Easy  # Default
 
             if day.date == form_data.race_date:
                 day.type = 'Race!'
@@ -249,7 +162,7 @@ def assign_phases(plan, form_data):
 def assign_quality(plan, form_data):
     """ Turn day types into actual workouts. """
     for day in plan.days:
-        if day.type == Day.Types.Quality:
+        if day.type == Day_types.Quality:
             # TODO: decide phases of the plan
             day.workout = 'warmup + workout + cooldown'
 

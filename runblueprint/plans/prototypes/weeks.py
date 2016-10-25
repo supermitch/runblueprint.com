@@ -1,5 +1,10 @@
+from plans.week import Week_types, Week_variants
+from plans.day import Day_types
+from plans.plan import Phases
+
+
 prototypes = {
-    'Base': {
+    Week_types.Base: {
         0: {  # Monday
             'percent_of_weekly_distance': 0.075,
             'type': 'easy'
@@ -29,8 +34,7 @@ prototypes = {
             'type': 'long',
         }
     },
-
-    'Work': {
+    Week_types.Work: {
         0: {  # Monday
             'percent_of_weekly_distance': 0.075,
             'type': 'easy'
@@ -60,8 +64,7 @@ prototypes = {
             'type': 'long',
         }
     },
-
-    'Rest': {
+    Week_types.Growth: {
         0: {  # Monday
             'percent_of_weekly_distance': 0.075,
         },
@@ -87,8 +90,7 @@ prototypes = {
             'percent_of_weekly_distance': 0.4,
         }
     },
-
-    'Taper': {
+    Week_types.Taper: {
         0: {  # Monday
             'percent_of_weekly_distance': 0.075,
             'type': 'easy'
@@ -118,8 +120,7 @@ prototypes = {
             'type': 'long',
         }
     },
-
-    'Recovery': {
+    Week_types.Recovery: {
         0: {  # Monday
             'percent_of_weekly_distance': 0.075,
             'type': 'recovery'
