@@ -3,7 +3,6 @@ import datetime
 import enum
 import logging
 import math
-import uuid
 
 from dateutil.relativedelta import *
 from dateutil.rrule import *
@@ -140,7 +139,7 @@ def apply_week_prototypes(plan, form_data):
                 day.type = Day_types.Easy  # Default
 
             if day.date == form_data.race_date:
-                day.type = 'Race!'
+                day.type = Day_types.Race
 
 
 def assign_phases(plan, form_data):

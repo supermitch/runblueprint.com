@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-Day_types = Enum('DayTypes', ['Recovery', 'Easy', 'Long', 'Quality', 'Rest', 'Crosstrain'])
+Day_types = Enum('DayTypes', 'Recovery Easy Long Quality Race Rest Crosstrain')
 
 
 class Day():
@@ -10,12 +10,9 @@ class Day():
         self.date = date
         self.distance = 0
         self.time = 0
-        self.type = ''  # Run type, e.g. Easy, Tempo
+        self.type = None  # Run type, e.g. Easy, Tempo (Enum)
         self.workout = ''  # Workout details, e.g. '2 mi E + 4 x (2 min T ...'
 
     def __str__(self):
         return '{}. {} {}: {} {:.1f}'.format(self.number, self.date.strftime('%Y-%m-%d'),
-            self.date.strftime('%a'), self.type, self.distance)
-
-
-
+            self.date.strftime('%a'), self.type.name, self.distance)
