@@ -2,7 +2,7 @@ import enum
 import uuid
 
 
-Phases = enum.Enum('Phases', ['Base', 'Lactate', 'Prep', 'Taper', 'Recovery'])
+Phases = enum.Enum('Phases', 'Base Lactate Prep Taper Recovery')
 
 
 class Plan():
@@ -47,4 +47,3 @@ class Plan():
             for day in week.days:
                 if day.date == date:
                     return day
-

@@ -1,8 +1,8 @@
 from enum import Enum
 
 
-Week_types = Enum('WeekTypes', ['Base', 'Growth', 'Work', 'Taper', 'Race', 'Recovery'])
-Week_variants = Enum('WeekVariants', ['Rest'])
+Week_types = Enum('WeekTypes', 'Base Growth Work Taper Race Recovery')
+Week_variants = Enum('WeekVariants', 'Rest')
 
 
 class Week():
@@ -10,9 +10,9 @@ class Week():
         self.number = number
         self.days = days  # List of days
         self.title = ''
-        self.type = ''
-        self.variant = ''
-        self.phase = None  # Mesocycle (int, 1-5)  # TODO: Use enum
+        self.type = None
+        self.variant = None
+        self.phase = None  # Mesocycle
         self._target_distance = 0  # Internal: planned distance for that week
 
     @property
@@ -24,5 +24,4 @@ class Week():
         return sum(day.time for day in self.days)
 
     def __str__(self):
-        return 'Week {}: {} - {:.1f} km - Phase {}'.format(self.number, self.title, self.distance, self.phase)
-
+        return 'Week {}: {} - {:.1f} km - Phase {}'.format(self.number, self.title, self.distance, self.phase.name)

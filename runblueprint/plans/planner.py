@@ -146,16 +146,15 @@ def assign_phases(plan, form_data):
     """ Mesocyles are applied backwards as time permits. """
     for i, week in enumerate(plan.weeks[::-1]):  # Work backwards
         if i < form_data.recovery_weeks:
-            # TODO: Enum mesocyles
-            week.phase = 5  # TODO: Redundant with week type?
+            week.phase = Phases.Recovery  # TODO: Redundant with week type?
         elif i < form_data.recovery_weeks + 6:
-            week.phase = 4  # Taper & Race
+            week.phase = Phases.Taper  # Taper & Race
         elif i < form_data.recovery_weeks + 12:
-            week.phase = 3  # Race Preparation
+            week.phase = Phases.Prep  # Race Preparation
         elif i < form_data.recovery_weeks + 18:
-            week.phase = 2  # Lactate Threshold
+            week.phase = Phases.Lactate  # Lactate Threshold
         else:
-            week.phase = 1  # Base / Endurance
+            week.phase = Phases.Base  # Base / Endurance
 
 
 def assign_quality(plan, form_data):
