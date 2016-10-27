@@ -13,8 +13,16 @@ class TestPlanMethods(TestCase):
                 week.type = Week_types.Taper
             else:
                 week.type = Week_types.Recovery
+
+            if i < 3:
+                week.title = 'Base'
+
             self.weeks.append(week)
         self.plan = Plan('Test Race', self.weeks)
+
+    def test_get_by_title(self):
+        result = self.plan.get_by_title('Base')
+        self.assertEqual(result, (0, self.weeks[0]))
 
     def test_count_weeks_by_type(self):
         result = self.plan.count_weeks_by_type(Week_types.Taper)

@@ -31,8 +31,8 @@ class Plan():
     def get_by_title(self, title):
         """ Find a week by title, return (index, week) tuple. """
         for i, week in enumerate(self.weeks):
-            if week.title.lower() == title:
-                return i, week
+            if week.title.lower() == title.lower():  # Case insensitive
+                return (i, week)
 
     def count_weeks_by_type(self, type):
         """ Count number of weeks for a given type. """
