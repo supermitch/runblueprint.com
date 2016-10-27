@@ -6,16 +6,20 @@ from plans.week import Week, Week_types
 
 class TestPlanMethods(TestCase):
     def setUp(self):
-        weeks = []
+        self.weeks = []
         for i in range(5):
             week = Week(i, [])  # Empty week
             if i < 2:
                 week.type = Week_types.Taper
             else:
                 week.type = Week_types.Recovery
-            weeks.append(week)
-        self.plan = Plan('Test Race', weeks)
+            self.weeks.append(week)
+        self.plan = Plan('Test Race', self.weeks)
 
     def test_count_weeks_by_type(self):
         result = self.plan.count_weeks_by_type(Week_types.Taper)
         self.assertEqual(result, 2)
+
+    def test_get_week_by_type(self):
+        result = self.plan.get_weeks_by_type(Week_types.Recovery)
+        self.assertEqual(result, [(2, self.weeks[2]), (3, self.weeks[3]), (4, self.weeks[4])])
