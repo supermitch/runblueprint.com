@@ -29,8 +29,15 @@ def _txt(plan):
     # Column width for Day Type
     day_type_width = max(len(day.type.name) for week in plan.weeks for day in week.days)
 
+    current_phase = None
     for week in plan.weeks:
+
+        if not current_phase or week.phase != current_phase:
+            output += '\n\n\n  =========== Phase {} - {} ===========\n'.format(week.phase.value, week.phase.name)
+            current_phase = week.phase
+
         output += '\n\n  ' + str(week)
+
         for day in week.days:
             output += '\n {:>4}. {}  {}  {:<{fill}}'.format(day.number,
                     day.date.strftime('%Y-%m-%d'), day.date.strftime('%a'),
@@ -38,5 +45,5 @@ def _txt(plan):
             if day.distance > 0:
                 output += ' {:>5.1f}'.format(day.distance)
             output += '  ' + day.workout
-    return output
 
+    return output

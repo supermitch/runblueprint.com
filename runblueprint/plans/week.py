@@ -24,4 +24,4 @@ class Week():
         return sum(day.time for day in self.days)
 
     def __str__(self):
-        return 'Week {}: {} - {:.1f} km - Phase {}'.format(self.number, self.title, self.distance, self.phase.name)
+        return 'Week {}: {} - {:.1f} km'.format(self.number, self.title, self.distance)
