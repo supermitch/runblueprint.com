@@ -200,8 +200,8 @@ def generate_blank_plan(form_data):
     recovery block. But the no distances or workouts.
     """
     start_date = determine_plan_start(form_data.plan_start, int(form_data.week_day_start))  # TODO: Form Data Type conversion
-    determine_race_week(form_data.race_date.weekday(), start_date.weekday())
-    end_date = add_recovery_block(form_data.race_date, start_date, form_data.recovery_weeks)
+    recovery_start = determine_race_week(form_data.race_date, start_date)
+    end_date = add_recovery_block(recovery_week, form_data.recovery_weeks)
     all_dates = generate_plan_dates(start_date, end_date)
     all_days = list(Day(i, d) for i, d in enumerate(all_dates, start=1))
     all_weeks = list(Week(i, w) for i, w in enumerate(chunk_into_weeks(all_days), start=1))
@@ -218,28 +218,31 @@ def determine_plan_start(plan_start, week_day_start):
     return plan_start - datetime.timedelta(delta_days)
 
 
-def determine_race_week(race_date, start_date, recovery_weeks):
+def determine_race_week(race_date, start_date):
     diff = race_date.weekday() - start_date.weekday()
+    recovery_start = race_date
     if 0 < diff > 7:
         logger.warn('Diff value <{}> out of bounds'.format(diff))
     if diff >= 5:  # Race is in last 2 days
-        result = 'taper'
         print('Race during taper')
+        result = 'taper'
         # Race day is part of taper week
         # Recovery starts after taper ends
         pass
     elif diff >= 2:  # Race is in the middle of the week
-        result = 'race week'
         print('Must add race week')
+        result = 'race'
+        recovery_start = race_date + relativedelta(days=+diff)
+        print(recovery_start)
         # We need to add a race week
         # Recovery starts after race week ends
         pass
     else:  # Race is part of Recovery week 1
+        print('Race during Recovery')
         result = 'recovery'
         # Recovery block starts after taper ends
-        print('Race during Recovery')
         pass
-    return result
+    return recovery_start
 
 
 def add_recovery_block(race_date, recovery_weeks):
