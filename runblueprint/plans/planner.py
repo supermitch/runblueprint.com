@@ -35,6 +35,9 @@ def assign_week_types(plan, form_data):
     for i, week in enumerate(plan.weeks[::-1]):  # Work backwards
         if i < form_data.recovery_weeks:
             week.type = Week_types.Recovery
+        # If race falls in the middle of the week, we add a "race week"
+        # If race falls early in the week, we include it to Rec week 1
+        # If race day falls late in the week, we include it in Taper 3
         elif i < form_data.recovery_weeks + form_data.taper_length:
             week.type = Week_types.Taper
         elif i < form_data.recovery_weeks + form_data.taper_length + 18:
@@ -197,7 +200,8 @@ def generate_blank_plan(form_data):
     recovery block. But the no distances or workouts.
     """
     start_date = determine_plan_start(form_data.plan_start, int(form_data.week_day_start))  # TODO: Form Data Type conversion
-    end_date = add_recovery_block(form_data.race_date, form_data.recovery_weeks)
+    determine_race_week(form_data.race_date.weekday(), start_date.weekday())
+    end_date = add_recovery_block(form_data.race_date, start_date, form_data.recovery_weeks)
     all_dates = generate_plan_dates(start_date, end_date)
     all_days = list(Day(i, d) for i, d in enumerate(all_dates, start=1))
     all_weeks = list(Week(i, w) for i, w in enumerate(chunk_into_weeks(all_days), start=1))
@@ -212,6 +216,30 @@ def determine_plan_start(plan_start, week_day_start):
     diff = plan_start.weekday() - week_day_start
     delta_days = diff if diff >= 0 else 7 + diff
     return plan_start - datetime.timedelta(delta_days)
+
+
+def determine_race_week(race_date, start_date, recovery_weeks):
+    diff = race_date.weekday() - start_date.weekday()
+    if 0 < diff > 7:
+        logger.warn('Diff value <{}> out of bounds'.format(diff))
+    if diff >= 5:  # Race is in last 2 days
+        result = 'taper'
+        print('Race during taper')
+        # Race day is part of taper week
+        # Recovery starts after taper ends
+        pass
+    elif diff >= 2:  # Race is in the middle of the week
+        result = 'race week'
+        print('Must add race week')
+        # We need to add a race week
+        # Recovery starts after race week ends
+        pass
+    else:  # Race is part of Recovery week 1
+        result = 'recovery'
+        # Recovery block starts after taper ends
+        print('Race during Recovery')
+        pass
+    return result
 
 
 def add_recovery_block(race_date, recovery_weeks):
