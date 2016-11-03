@@ -32,6 +32,7 @@ def generate_plan(form_data):
 
 
 def assign_week_types(plan, form_data):
+    race_week = True
     if race_week:
         race_week_count = 1
     for i, week in enumerate(plan.weeks[::-1]):  # Work backwards
@@ -220,26 +221,26 @@ def determine_plan_start(plan_start, week_day_start):
 
 
 def determine_race_week(race_date, start_date):
+    """
+    Where race day falls in the week will determine whether it can be part
+    of taper, recovery, or it's own 'race week'.
+    """
     diff = race_date.weekday() - start_date.weekday()
-    recovery_start = race_date
     if 0 < diff > 7:
         logger.warn('Diff value <{}> out of bounds'.format(diff))
+        recovery_start = race_date
     if diff >= 5:  # Race is in last 2 days
         print('Race during taper')
-        result = 'taper'
-        # Race day is part of taper week
-        # Recovery starts after taper ends
+        # Race day is part of taper week. Recovery starts after taper ends
+        recovery_start = race_date + relativedelta(days=+diff)
     elif diff >= 2:  # Race is in the middle of the week
         print('Must add race week')
-        result = 'race'
+        # We need to add a race week. Recovery starts after race week ends
         recovery_start = race_date + relativedelta(days=+diff)
-        print(recovery_start)
-        # We need to add a race week
-        # Recovery starts after race week ends
     else:  # Race is part of Recovery week 1
         print('Race during Recovery')
-        result = 'recovery'
         recovery_start = race_date + relativedelta(days=-diff)  # Recovery block starts after taper ends
+    print(recovery_start)
     return recovery_start
 
 

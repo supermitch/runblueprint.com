@@ -26,3 +26,8 @@ class TestPlannerFunctions(SimpleTestCase):
         week_day_start = 0  # Monday
         start_date = determine_plan_start(plan_start, week_day_start)
         self.assertEqual(start_date, datetime.date(2016, 10, 10))
+
+    def test_determine_race_week(self):
+        race_date = datetime.date(2016, 11, 2)  # Wed
+        self.assertEqual(race_date.weekday(), 2)  # Prove it's a Wed
+
