@@ -33,8 +33,7 @@ def generate_plan(form_data):
 
 def assign_week_types(plan, form_data):
     race_week = True
-    if race_week:
-        race_week_count = 1
+    race_week_count = 1 if race_week else 0
     for i, week in enumerate(plan.weeks[::-1]):  # Work backwards
         if i < form_data.recovery_weeks:
             week.type = Week_types.Recovery
