@@ -32,7 +32,7 @@ def generate_plan(form_data):
 
 
 def assign_week_types(plan, form_data):
-    race_week = True
+    race_week = needs_race_week(form_data.race_date, form_data.start_date)
     race_week_count = 1 if race_week else 0
     for i, week in enumerate(plan.weeks[::-1]):  # Work backwards
         if i < form_data.recovery_weeks:
@@ -217,6 +217,12 @@ def determine_plan_start(plan_start, week_day_start):
     diff = plan_start.weekday() - week_day_start
     delta_days = diff if diff >= 0 else 7 + diff
     return plan_start - datetime.timedelta(delta_days)
+
+
+def needs_race_week(race_date, start_date):
+    """ Calculate if we need to add a race week. """
+    diff = race_date.weekday() - start_date.weekday()
+    return 2 <= diff <= 5  # Race is in the middle of the week
 
 
 def determine_race_week(race_date, start_date):
