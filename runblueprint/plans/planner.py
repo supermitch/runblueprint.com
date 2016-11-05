@@ -32,16 +32,15 @@ def generate_plan(form_data):
 
 
 def assign_week_types(plan, form_data):
-    race_week = needs_race_week(form_data.race_date, plan.start_date)
-    race_week_count = 1 if race_week else 0
+    race_week = 1 if needs_race_week(form_data.race_date, plan.start_date) else 0
     for i, week in enumerate(plan.weeks[::-1]):  # Work backwards
         if i < form_data.recovery_weeks:
             week.type = Week_types.Recovery
-        elif race_week and i < form_data.recovery_weeks + race_week_count:
+        elif race_week and i < form_data.recovery_weeks + race_week:
             week.type = Week_types.Race
-        elif i < form_data.recovery_weeks + race_week_count + form_data.taper_length:
+        elif i < form_data.recovery_weeks + race_week + form_data.taper_length:
             week.type = Week_types.Taper
-        elif i < form_data.recovery_weeks + race_week_count + form_data.taper_length + 18:
+        elif i < form_data.recovery_weeks + race_week + form_data.taper_length + 18:
             week.type = Week_types.Work
         else:
             week.type = Week_types.Base
