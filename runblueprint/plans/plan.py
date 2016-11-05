@@ -27,6 +27,9 @@ class Plan():
         """ A handy generator of all plan days. """
         return (day for week in self.weeks for day in week.days)
 
+    @property
+    def start_date(self):
+        return self.weeks[0].days[0].date
 
     def get_by_title(self, title):
         """ Find a week by title, return (index, week) tuple. """
