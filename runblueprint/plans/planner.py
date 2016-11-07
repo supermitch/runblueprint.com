@@ -200,7 +200,7 @@ def generate_blank_plan(form_data):
     recovery block. But the no distances or workouts.
     """
     start_date = determine_plan_start(form_data.plan_start, int(form_data.week_day_start))  # TODO: Form Data Type conversion
-    recovery_start, taper_end = determine_race_week(form_data.race_date, start_date)
+    recovery_start, form_data.race_week = determine_race_week(form_data.race_date, start_date)
     end_date = add_recovery_block(recovery_start, form_data.recovery_weeks)
     all_dates = generate_plan_dates(start_date, end_date)
     all_days = list(Day(i, d) for i, d in enumerate(all_dates, start=1))
@@ -221,7 +221,7 @@ def determine_plan_start(plan_start, week_day_start):
 def needs_race_week(race_date, start_date):
     """ Calculate if we need to add a race week. """
     diff = race_date.weekday() - start_date.weekday()
-    return 2 <= diff <= 5  # Race is in the middle of the week
+    return 2 <= diff < 5  # Race is in the middle of the week
 
 
 def determine_race_week(race_date, start_date):
@@ -231,24 +231,22 @@ def determine_race_week(race_date, start_date):
     """
     diff = race_date.weekday() - start_date.weekday()
     add = 7 - diff
+    race_week = 0
     if 0 < diff > 7:
-        logger.warn('Diff value <{}> out of bounds'.format(diff))
+        logger.error('Diff value <{}> out of bounds'.format(diff))
         recovery_start = race_date
-        taper_end = race_date
     if diff >= 5:  # Race is in last 2 days: Part of Taper
         print('Race during taper')
         recovery_start = race_date + relativedelta(days=+add)  # Recovery starts after taper ends
-        taper_end = race_date + relativedelta(days=+add)
     elif diff >= 2:  # Race is in the middle of the week: During a race week
-        print('Must add race week')
+        print('Race during race week')
         recovery_start = race_date + relativedelta(days=+add)  # Recovery starts after race week ends
-        taper_end = race_date + relativedelta(days=-diff)
+        race_week = 1
     else:  # Race is part of Recovery week 1
-        print('Race during Recovery')
+        print('Race during recovery')
         recovery_start = race_date + relativedelta(days=-diff)  # Recovery block starts after taper ends
-        taper_end = race_date + relativedelta(days=-diff)
-    print(recovery_start, taper_end)
-    return recovery_start, taper_end
+    print(recovery_start, race_week)
+    return recovery_start, race_week
 
 
 def add_recovery_block(recovery_start, recovery_weeks):
