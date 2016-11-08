@@ -72,9 +72,9 @@ def assign_week_titles(plan, form_data):
 
         for day in week.days:  # Set peak & race week
             if day.date == form_data.peak_day:
-                week.title = 'Peak week'
+                week.title += ' / Peak week'
             elif day.date == form_data.race_date:
-                week.title = 'Race week'
+                week.title += ' / Race week'
 
 
 def assign_weekly_distance(plan, form_data):

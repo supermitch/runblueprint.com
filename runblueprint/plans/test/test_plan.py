@@ -24,6 +24,11 @@ class TestPlanMethods(TestCase):
         result = self.plan.get_by_title('Base')
         self.assertEqual(result, (0, self.weeks[0]))
 
+    def test_get_by_title_part(self):
+        self.plan.weeks[0].title = 'Endurance / Base'  # Multiple titles
+        result = self.plan.get_by_title('Base')
+        self.assertEqual(result, (0, self.weeks[0]))
+
     def test_count_weeks_by_type(self):
         result = self.plan.count_weeks_by_type(Week_types.Taper)
         self.assertEqual(result, 2)
