@@ -120,6 +120,36 @@ prototypes = {
             'type': 'long',
         }
     },
+    Week_types.Race: {
+        0: {  # Monday
+            'percent_of_weekly_distance': 0.075,
+            'type': 'easy'
+        },
+        1: {
+            'percent_of_weekly_distance': 0.125,
+            'type': 'easy'
+        },
+        2: {
+            'percent_of_weekly_distance': 0.2,
+            'type': 'easy'
+        },
+        3: {
+            'percent_of_weekly_distance': 0.1,
+            'type': 'easy'
+        },
+        4: {
+            'percent_of_weekly_distance': 0,
+            'type': 'crosstrain',
+        },
+        5: {
+            'percent_of_weekly_distance': 0.1,
+            'type': 'easy'
+        },
+        6: {
+            'percent_of_weekly_distance': 0.4,
+            'type': 'long',
+        }
+    },
     Week_types.Recovery: {
         0: {  # Monday
             'percent_of_weekly_distance': 0.075,

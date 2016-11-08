@@ -33,6 +33,10 @@ def generate_plan(form_data):
 
 def assign_week_types(plan, form_data):
     race_week = 1 if needs_race_week(form_data.race_date, plan.start_date) else 0
+    if race_week:
+        print('Adding race week')
+    else:
+        print('no race week')
     for i, week in enumerate(plan.weeks[::-1]):  # Work backwards
         if i < form_data.recovery_weeks:
             week.type = Week_types.Recovery
@@ -202,6 +206,7 @@ def generate_blank_plan(form_data):
     start_date = determine_plan_start(form_data.plan_start, int(form_data.week_day_start))  # TODO: Form Data Type conversion
     recovery_start, form_data.race_week = determine_race_week(form_data.race_date, start_date)
     end_date = add_recovery_block(recovery_start, form_data.recovery_weeks)
+    print('End date: {}'.format(end_date))
     all_dates = generate_plan_dates(start_date, end_date)
     all_days = list(Day(i, d) for i, d in enumerate(all_dates, start=1))
     all_weeks = list(Week(i, w) for i, w in enumerate(chunk_into_weeks(all_days), start=1))
@@ -230,6 +235,7 @@ def determine_race_week(race_date, start_date):
     of taper, recovery, or it's own 'race week'.
     """
     diff = race_date.weekday() - start_date.weekday()
+    print('Diff: {}'.format(diff))
     add = 7 - diff
     race_week = 0
     if 0 < diff > 7:
@@ -240,12 +246,13 @@ def determine_race_week(race_date, start_date):
         recovery_start = race_date + relativedelta(days=+add)  # Recovery starts after taper ends
     elif diff >= 2:  # Race is in the middle of the week: During a race week
         print('Race during race week')
-        recovery_start = race_date + relativedelta(days=+add)  # Recovery starts after race week ends
+        recovery_start = race_date + relativedelta(days=+add-1)  # Recovery starts after race week ends
         race_week = 1
     else:  # Race is part of Recovery week 1
         print('Race during recovery')
         recovery_start = race_date + relativedelta(days=-diff)  # Recovery block starts after taper ends
-    print(recovery_start, race_week)
+    print('Recovery Start: {}'.format(recovery_start))
+    print('Race Week: {}'.format(race_week))
     return recovery_start, race_week
 
 
