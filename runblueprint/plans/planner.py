@@ -22,11 +22,11 @@ def generate_plan(form_data):
 
     assign_phases(plan, form_data)
     assign_week_types(plan, form_data)
-    assign_week_titles(plan, form_data)
     assign_weekly_distance(plan, form_data)
     apply_week_prototypes(plan, form_data)
     assign_quality(plan, form_data)
     assign_daily_distances(plan, form_data)
+    assign_week_titles(plan, form_data)
 
     return plan
 
@@ -48,6 +48,47 @@ def assign_week_types(plan, form_data):
             week.type = Week_types.Work
         else:
             week.type = Week_types.Base
+
+
+
+def assign_weekly_distance(plan, form_data):
+    """ Assign weekly mileage targets to each of our plan's weeks. """
+    start_dist = determine_starting_mileage(form_data)  # TODO: Week 0 might be a base phase and not actually use the "starting mileage" value
+    peak_dist = determine_peak_mileage(form_data)
+
+    start_index = 0
+    for i, week in enumerate(plan.weeks):
+        if week.type == Week_types.Taper:
+            peak_index = i - 1  # First week before Taper is the last Work week
+
+    # Set work volumes
+    # TODO: set distances differently for base & work phases
+    for i, week in enumerate(plan.weeks[:peak_index + 1]):  # Fill in from weeks 0 to peak week, inclusive
+        target_distance = start_dist + (peak_dist - start_dist) / (peak_index - start_index) * i  # Linearly increase in mileage from start to peak
+        if week.variant == Week_variants.Rest:
+            target_distance *= 0.6  # Rest week is 60 %
+        week._target_distance = target_distance
+
+    # Set taper volumes
+    taper_count = plan.count_weeks_by_type(Week_types.Taper)
+    if taper_count == 4:
+        taper_percents = {1: 0.60, 2: 0.80, 3: 0.60, 4: 0.25}
+    elif taper_count == 3:
+        taper_percents = {1: 0.75, 2: 0.50, 3: 0.25}
+    elif taper_count == 2:
+        taper_percents = {1: 0.20, 2: 0.20}
+    elif taper_count == 1:
+        taper_percents = {1: 0.10}
+    else:
+        raise ValueError('Invalid number of taper weeks ({}). Must be from 0 to 4 weeks'.format(taper_count))
+
+    for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week_types.Taper), start=1):
+        taper_percent = taper_percents[idx]
+        week._target_distance = taper_percent * peak_dist
+
+    for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week_types.Recovery), start=1):
+        recovery_percent = {1: 0.20, 2: 0.36, 3: 0.43, 4: 0.50, 5: 0.59}[idx]
+        week._target_distance = recovery_percent * peak_dist
 
 
 def assign_week_titles(plan, form_data):
@@ -79,43 +120,6 @@ def assign_week_titles(plan, form_data):
                 week.title += ' / Race week'
 
     plan.peak_week().title += ' / Peak week'
-
-def assign_weekly_distance(plan, form_data):
-    """ Assign weekly mileage targets to each of our plan's weeks. """
-    start_dist = determine_starting_mileage(form_data)  # TODO: Week 0 might be a base phase and not actually use the "starting mileage" value
-    peak_dist = determine_peak_mileage(form_data)
-
-    start_idx = 0
-    peak_idx, _ = plan.get_by_title('peak week')
-
-    # Set work volumes
-    # TODO: set distances differently for base & work phases
-    for i, week in enumerate(plan.weeks[:peak_idx + 1]):  # Fill in from weeks 0 to peak week, inclusive
-        target_distance = start_dist + (peak_dist - start_dist) / (peak_idx - start_idx) * i  # Linearly increase in mileage from start to peak
-        if week.variant == Week_variants.Rest:
-            target_distance *= 0.6  # Rest week is 60 %
-        week._target_distance = target_distance
-
-    # Set taper volumes
-    taper_count = plan.count_weeks_by_type(Week_types.Taper)
-    if taper_count == 4:
-        taper_percents = {1: 0.60, 2: 0.80, 3: 0.60, 4: 0.25}
-    elif taper_count == 3:
-        taper_percents = {1: 0.75, 2: 0.50, 3: 0.25}
-    elif taper_count == 2:
-        taper_percents = {1: 0.20, 2: 0.20}
-    elif taper_count == 1:
-        taper_percents = {1: 0.10}
-    else:
-        raise ValueError('Invalid number of taper weeks ({}). Must be from 0 to 4 weeks'.format(taper_count))
-
-    for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week_types.Taper), start=1):
-        taper_percent = taper_percents[idx]
-        week._target_distance = taper_percent * peak_dist
-
-    for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week_types.Recovery), start=1):
-        recovery_percent = {1: 0.20, 2: 0.36, 3: 0.43, 4: 0.50, 5: 0.59}[idx]
-        week._target_distance = recovery_percent * peak_dist
 
 
 def apply_week_prototypes(plan, form_data):

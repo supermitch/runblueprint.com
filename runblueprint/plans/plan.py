@@ -16,7 +16,7 @@ class Plan():
 
     @property
     def distance(self):
-        return sum(x.distance for x in self.weeks)
+        return sum(week.distance for week in self.weeks)
 
     @property
     def time(self):
@@ -36,7 +36,9 @@ class Plan():
         max_distance = 0
         peak_week = None
         for week in self.weeks:
+            print('Week {}'.format(week))
             if week.distance >= max_distance:
+                print('Has max: {} vs {}'.format(week.distance, max_distance))
                 max_distance = week.distance
                 peak_week = week
         return peak_week
