@@ -31,6 +31,16 @@ class Plan():
     def start_date(self):
         return self.weeks[0].days[0].date
 
+    def peak_week(self):
+        """ Find the peak week, which is the longest by distance. """
+        max_distance = 0
+        peak_week = None
+        for week in self.weeks:
+            if week.distance >= max_distance:
+                max_distance = week.distance
+                peak_week = week
+        return peak_week
+
     def get_by_title(self, title):
         """ Find a week by title, return (index, week) tuple. """
         for i, week in enumerate(self.weeks):

@@ -74,12 +74,11 @@ def assign_week_titles(plan, form_data):
                 week.variant = Week_variants.Rest
                 week.title += ' - Rest'
 
-        for day in week.days:  # Set peak & race week
-            if day.date == form_data.peak_day:
-                week.title += ' / Peak week'
-            elif day.date == form_data.race_date and week.title != 'Race week':  # Sometimes we already have a Race Week
+        for day in week.days:  # Set race week
+            if day.date == form_data.race_date and week.title != 'Race week':  # Sometimes we already have a Race Week
                 week.title += ' / Race week'
 
+    plan.peak_week().title += ' / Peak week'
 
 def assign_weekly_distance(plan, form_data):
     """ Assign weekly mileage targets to each of our plan's weeks. """
@@ -208,8 +207,8 @@ def generate_blank_plan(form_data):
     end_date = add_recovery_block(recovery_start, form_data.recovery_weeks)
     print('End date: {}'.format(end_date))
     all_dates = generate_plan_dates(start_date, end_date)
-    all_days = list(Day(i, d) for i, d in enumerate(all_dates, start=1))
-    all_weeks = list(Week(i, w) for i, w in enumerate(chunk_into_weeks(all_days), start=1))
+    all_days = list(Day(i, day) for i, day in enumerate(all_dates, start=1))
+    all_weeks = list(Week(i, week) for i, week in enumerate(chunk_into_weeks(all_days), start=1))
     return Plan(form_data.race_name, all_weeks)
 
 
