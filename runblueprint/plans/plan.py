@@ -36,9 +36,7 @@ class Plan():
         max_distance = 0
         peak_week = None
         for week in self.weeks:
-            print('Week {}'.format(week))
             if week.distance >= max_distance:
-                print('Has max: {} vs {}'.format(week.distance, max_distance))
                 max_distance = week.distance
                 peak_week = week
         return peak_week
