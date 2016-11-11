@@ -45,16 +45,19 @@ class TestPlannerFunctions(SimpleTestCase):
 
 
     def test_determine_recovery_start_taper(self):
+        race_date = datetime.date(2016, 11, 8)  # Tue
         start_date = datetime.date(2016, 11, 7)  # Mon
-        race_date = datetime.date(2016, 11, 8)  # Tue # Should start on Monday before the race
-        self.assertEqual(determine_recovery_start(race_date, start_date), datetime.date(2016, 11, 6))
+        result = determine_recovery_start(race_date, start_date)
+        self.assertEqual(result, datetime.date(2016, 11, 6))  # Should start on Monday before the race
 
     def test_determine_recovery_start_recovery(self):
+        race_date = datetime.date(2016, 11, 9)  # Wed
         start_date = datetime.date(2016, 11, 7)  # Mon
-        race_date = datetime.date(2016, 11, 9)  # Wed # Should start on first Monday after race
-        self.assertEqual(determine_recovery_start(race_date, start_date), datetime.date(2016, 11, 13))
+        result = determine_recovery_start(race_date, start_date)
+        self.assertEqual(result, datetime.date(2016, 11, 13))  # Should start on first Monday after race
 
     def test_determine_recovery_start_race_week(self):
+        race_date = datetime.date(2016, 11, 12)  # Sat
         start_date = datetime.date(2016, 11, 7)  # Mon
-        race_date = datetime.date(2016, 11, 12)  # Sat # Should start on Monday after the race
-        self.assertEqual(determine_recovery_start(race_date, start_date), datetime.date(2016, 11, 13))
+        result = determine_recovery_start(race_date, start_date)
+        self.assertEqual(result, datetime.date(2016, 11, 13))  # Should start on Monday after the race
