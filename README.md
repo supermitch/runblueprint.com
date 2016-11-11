@@ -1,4 +1,4 @@
-# runblueprint.com
+# Runblueprint.com
 
 Running training plan generator.
 
