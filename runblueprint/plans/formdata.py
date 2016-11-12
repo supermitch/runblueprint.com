@@ -10,24 +10,21 @@ class FormData():
         """ Take cleaned Django form data, save it, and assign it as attrs. """
         self.raw_data = raw_form_data
         self.parse_raw_data(self.raw_data)
-        self.peak_day = self.calc_peak_day()  # Must be calculated
 
     def parse_raw_data(self, raw_data):
         """ Turn dict k:v pairs into instance attributes """
-        ints = [
-            'race_distance',
-            'steady_mileage',
-            'peak_mileage',
-            'year_mileage',
-            'three_month_mileage',
+        ints = [  # List of integer attributes
             'longest_distance',
-            'taper_length',
+            'peak_mileage',
+            'race_distance',
             'recovery_weeks',
+            'steady_mileage',
+            'taper_length',
+            'three_month_mileage',
+            'week_day_start',
+            'year_mileage',
         ]
         for key, value in raw_data.items():
-            if value is not None and key in ints:
+            if key in ints and value is not None:
                 value = int(value)
             setattr(self, key, value)
-
-    def calc_peak_day(self):
-        return self.race_date + relativedelta(weeks=-self.taper_length)
