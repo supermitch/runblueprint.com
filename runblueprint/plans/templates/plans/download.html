@@ -6,7 +6,11 @@
 
       <h1>Download your training plan!</h1>
 
-      <p>Here is your plan ID {{ plan_id }}</p>
+      {% if plan_name %}
+      <h3>{{ plan_name }}</h3>
+      {% endif %}
+
+      <p>Choose from the following formats:</p>
 
       <ul>
       {% for plan in plans %}
@@ -16,7 +20,7 @@
 
       <p>Enjoy!</p>
 
-      <p><a href="{% url 'plans' %}">Design another plan</a></p>
+      <p><a href="{% url 'plans' %}">Design another plan</a>.</p>
 
     </div>
 </div>

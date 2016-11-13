@@ -19,6 +19,7 @@ def index(request):
             plan = planner.generate_plan(form_data)
 
             request.session['plan_id'] = plan.id  # Save plan ID to session
+            request.session['plan_name'] = plan.name
 
             persister.persist(plan)  # Save plan to disk
 
@@ -36,7 +37,7 @@ def download(request):
         plain_text = {'type': 'text', 'url':"{}{}.txt".format(settings.MEDIA_URL, plan_id)}
         html = {'type': 'html', 'url':"{}{}.html".format(settings.MEDIA_URL, plan_id)}
         plans = [plain_text, html]
-        context = {'plans': plans, 'plan_id': plan_id}
+        context = {'plans': plans, 'plan_name': request.session['plan_name']}
     else:
         context = {}
     return render(request, 'plans/download.html', context)
