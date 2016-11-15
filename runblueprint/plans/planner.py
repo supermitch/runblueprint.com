@@ -3,6 +3,7 @@ import datetime
 import enum
 import logging
 import math
+import random
 
 from dateutil.relativedelta import *
 from dateutil.rrule import *
@@ -10,7 +11,7 @@ from dateutil.rrule import *
 from plans.week import Week, Week_types, Week_variants
 from plans.plan import Plan, Phases
 from plans.day import Day, Day_types
-from plans.prototypes import weeks
+from plans.prototypes import weeks, workouts
 
 
 logger = logging.getLogger(__file__)
@@ -169,10 +170,16 @@ def assign_phases(plan, form_data):
 
 def assign_quality(plan, form_data):
     """ Turn day types into actual workouts. """
-    for day in plan.days:
-        if day.type == Day_types.Quality:
-            # TODO: decide phases of the plan
-            day.workout = 'warmup + workout + cooldown'
+    for week in plan.weeks:
+        for day in (x for x in plan.days if x.type == Day_types.Quality):
+            try:
+                workout_types = workouts.phases[week.phase]  # Choose workouts from current phase
+            except KeyError:
+                logging.error('Week phase <{}> not found in workout prototypes. Using Base.'.format(week.phase))
+                workout_types = workouts.phases[Phases.Base]
+            # TODO: Workout types from Enum
+            type = random.choice(['Tempo', 'Intervals', 'Hills'])  # Pick a random type
+            day.workout = random.choice(workout_types[type])  # Pick a random workout
 
 
 def assign_daily_distances(plan, form_data):

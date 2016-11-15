@@ -1,4 +1,4 @@
-from plan import Phases
+from plans.plan import Phases
 
 phases = {
     Phases.Base: {
