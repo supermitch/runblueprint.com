@@ -23,5 +23,8 @@ class Week():
     def time(self):
         return sum(day.time for day in self.days)
 
+    def shortest_day(self):
+        return sorted(self.days, key=lambda d:d.distance)[0]
+
     def __str__(self):
         return 'Week {}: {} - {:.1f} km'.format(self.number, self.title, self.distance)
