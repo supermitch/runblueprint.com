@@ -180,11 +180,20 @@ def assign_quality(plan, form_data):
 
 def assign_daily_distances(plan, form_data):
     """ Now that weeks are set, customize individual daily distances. """
-    for day in plan.days:
-        day.distance = min(day.distance, determine_max_long_run(form_data))
-        # TODO: Now we need to redo the other run distances
-        if day.date == form_data.race_date:  # TODO: is there an easier way to find a specific date?
-            day.distance = form_data.race_distance
+    for week in plan.weeks:
+        for day in week.days:
+            day.distance = min(day.distance, determine_max_long_run(form_data))  # Cap each day
+
+            diff = week._target_distance - week.distance
+            if diff > 0:
+                short_day = week.shortest_day()
+                if short_day.type == Day_types.Crosstrain:  # Usually the case
+                    short_day.type = Day_types.Easy
+                week.shortest_day().distance += diff   # A bit lame: shortest day gets bumped up.
+
+            if day.date == form_data.race_date:  # TODO: is there an easier way to find a specific date?
+                day.distance = form_data.race_distance  # TODO: Split races up, based on pace, into multiple days
+
 
 
 def determine_starting_mileage(form_data):
