@@ -19,8 +19,14 @@ class TestWeek(TestCase):
         self.assertEqual(self.week.distance, 21)
 
     def test_shortest_day(self):
-        self.assertEqual(self.week.shortest_day(), self.days[0])
-        self.assertEqual(self.week.shortest_day().distance, 0)
+        self.assertEqual(self.week.shortest_day, self.days[0])
+        self.assertEqual(self.week.shortest_day.distance, 0)
 
         self.week.days[2].distance = -2  # New shortest
-        self.assertEqual(self.week.shortest_day(), self.days[2])
+        self.assertEqual(self.week.shortest_day, self.days[2])
+
+    def test_shortest_days(self):
+        self.assertEqual(self.week.shortest_days(2), [self.days[0], self.days[1]])
+
+        self.week.days[2].distance = -2  # New shortest
+        self.assertEqual(self.week.shortest_days(3), [self.days[2], self.days[0], self.days[1]])
