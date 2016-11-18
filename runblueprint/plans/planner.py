@@ -185,11 +185,17 @@ def assign_daily_distances(plan, form_data):
             day.distance = min(day.distance, determine_max_long_run(form_data))  # Cap each day
 
             diff = week._target_distance - week.distance
-            if diff > 0:
-                short_day = week.shortest_day()
+            if diff > 5:
+                short_day = week.shortest_day
                 if short_day.type == Day_types.Crosstrain:  # Usually the case
                     short_day.type = Day_types.Easy
-                week.shortest_day().distance += diff   # A bit lame: shortest day gets bumped up.
+                short_day.distance += diff   # A bit lame: shortest day gets bumped up. Be smarter than this?
+            else:
+                short_days = week.shortest_days(3)
+                for day in short_days:
+                    if day.type == Day_types.Crosstrain:
+                        day.type = Day_types.Easy
+                    day.distance += diff / 3  # Split equally
 
             if day.date == form_data.race_date:  # TODO: is there an easier way to find a specific date?
                 day.distance = form_data.race_distance  # TODO: Split races up, based on pace, into multiple days
