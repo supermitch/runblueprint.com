@@ -186,7 +186,7 @@ def assign_daily_distances(plan, form_data):
 
             diff = week._target_distance - week.distance
             if diff > 5:
-                short_day = week.shortest_day
+                short_day = week.shortest_day()
                 if short_day.type == Day_types.Crosstrain:  # Usually the case
                     short_day.type = Day_types.Easy
                 short_day.distance += diff   # A bit lame: shortest day gets bumped up. Be smarter than this?

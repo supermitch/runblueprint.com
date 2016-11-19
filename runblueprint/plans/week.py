@@ -23,7 +23,6 @@ class Week():
     def time(self):
         return sum(day.time for day in self.days)
 
-    @property
     def shortest_day(self):
         return self.shortest_days(1)[0]
 
