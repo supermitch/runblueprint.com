@@ -52,16 +52,23 @@ def assign_weekly_distance(plan, form_data):
     """ Assign weekly mileage targets to each of our plan's weeks. """
     start_dist = determine_starting_mileage(form_data)  # TODO: Week 0 might be a base phase and not actually use the "starting mileage" value
     peak_dist = determine_peak_mileage(form_data)
+    delta_dist = peak_dist - start_dist
 
     start_index = 0
     for i, week in enumerate(plan.weeks):
         if week.type == Week_types.Taper:
             peak_index = i - 1  # First week before Taper is the last Work week
+    weeks = peak_index - start_index
 
     # Set work volumes
     # TODO: set distances differently for base & work phases
     for i, week in enumerate(plan.weeks[:peak_index + 1]):  # Fill in from weeks 0 to peak week, inclusive
-        target_distance = start_dist + (peak_dist - start_dist) / (peak_index - start_index) * i  # Linearly increase in mileage from start to peak
+        if form_data.growth_method == 'gradual':  # Weekly increases
+            target_distance = start_dist + delta_dist / weeks * i  # Linearly increase in mileage from start to peak
+        else:  # Daniels monthly increases
+            months = weeks / 4
+            month = i % 4
+            target_distance = start_dist + delta_dist / months * month
         if week.variant == Week_variants.Rest:
             target_distance *= 0.6  # Rest week is 60 %
         week._target_distance = target_distance
