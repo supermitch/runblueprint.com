@@ -63,14 +63,17 @@ def assign_weekly_distance(plan, form_data):
     # Set work volumes
     # TODO: set distances differently for base & work phases
     for i, week in enumerate(plan.weeks[:peak_index + 1]):  # Fill in from weeks 0 to peak week, inclusive
+
         if form_data.growth_method == 'gradual':  # Weekly increases
             target_distance = start_dist + delta_dist / weeks * i  # Linearly increase in mileage from start to peak
         else:  # Daniels monthly increases
             months = weeks / 4
-            month = i % 4
+            month = math.floor(i / 4)  # Jumps every 4 weeks
             target_distance = start_dist + delta_dist / months * month
+
         if week.variant == Week_variants.Rest:
             target_distance *= 0.6  # Rest week is 60 %
+
         week._target_distance = target_distance
 
     # Set taper volumes
