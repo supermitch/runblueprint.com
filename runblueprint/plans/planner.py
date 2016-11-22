@@ -23,6 +23,7 @@ def generate_plan(form_data):
 
     assign_phases(plan, form_data)
     assign_week_types(plan, form_data)
+    assign_variants(plan, form_data)
     assign_weekly_distance(plan, form_data)
     apply_week_prototypes(plan, form_data)
     assign_quality(plan, form_data)
@@ -46,6 +47,12 @@ def assign_week_types(plan, form_data):
         else:
             week.type = Week_types.Base
 
+
+def assign_variants(plan, form_data):
+    for i, week in enumerate(plan.weeks):
+        if (i + 1) % 4 == 0:  # Every 4th week
+            if week.type in (Week_types.Base, Week_types.Work):  # Other phases have no rest weeks
+                week.variant = Week_variants.Rest
 
 
 def assign_weekly_distance(plan, form_data):
@@ -117,10 +124,8 @@ def assign_week_titles(plan, form_data):
         except IndexError:  # Don't agonize over array bounds
             week.title = week.type.capitalize() + ' week'
 
-        if (i + 1) % 4 == 0:  # Every 4th week is a rest week
-            if week.type in (Week_types.Base, Week_types.Work):  # Other phases have no rest weeks
-                week.variant = Week_variants.Rest
-                week.title += ' - Rest'
+        if week.variant == Week_variants.Rest:
+            week.title += ' - Rest'
 
         for day in week.days:  # Set race week
             if day.date == form_data.race_date and week.title != 'Race week':  # Sometimes we already have a Race Week
