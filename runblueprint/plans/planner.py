@@ -65,6 +65,7 @@ def assign_weekly_distance(plan, form_data):
     for i, week in enumerate(plan.weeks):
         if week.type == Week_types.Taper:
             peak_index = i - 1  # First week before Taper is the last Work week
+            break
     weeks = peak_index - start_index
 
     # Set work volumes
@@ -76,7 +77,7 @@ def assign_weekly_distance(plan, form_data):
         else:  # Daniels monthly increases
             months = weeks / 4
             month = math.floor(i / 4)  # Jumps every 4 weeks
-            target_distance = start_dist + delta_dist / months * month
+            target_distance = start_dist + delta_dist * month / months
 
         if week.variant == Week_variants.Rest:
             target_distance *= 0.6  # Rest week is 60 %
