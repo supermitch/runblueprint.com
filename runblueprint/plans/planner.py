@@ -60,24 +60,29 @@ def assign_weekly_distance(plan, form_data):
     start_dist = determine_starting_mileage(form_data)  # TODO: Week 0 might be a base phase and not actually use the "starting mileage" value
     peak_dist = determine_peak_mileage(form_data)
     delta_dist = peak_dist - start_dist
+    print('start: {}, end: {}, delta: {}'.format(start_dist, peak_dist, delta_dist))
 
-    start_index = 0
+    start_index = 0  # TODO: Week 0 might be a base phase and not actually use the "starting mileage" value
     for i, week in enumerate(plan.weeks):
         if week.type == Week_types.Taper:
-            peak_index = i - 1  # First week before Taper is the last Work week
+            taper_index = i  # First week before Taper is the peak week
             break
-    weeks = peak_index - start_index
+    weeks = taper_index - start_index - 4  # We do one month at base mileage
+    months = weeks / 4
+    print('Weeks: {}'.format(weeks))
+    print('Months: {}'.format(months))
 
     # Set work volumes
     # TODO: set distances differently for base & work phases
-    for i, week in enumerate(plan.weeks[:peak_index + 1]):  # Fill in from weeks 0 to peak week, inclusive
-
+    for i, week in enumerate(plan.weeks[:taper_index]):  # Fill in from weeks 0 to peak week, inclusive
+        print('i: {}'.format(i))
         if form_data.growth_method == 'gradual':  # Weekly increases
             target_distance = start_dist + delta_dist / weeks * i  # Linearly increase in mileage from start to peak
         else:  # Daniels monthly increases
-            months = weeks / 4
-            month = math.floor(i / 4)  # Jumps every 4 weeks
+            month = math.floor(i / 4)  # Increase mileage every 4 weeks
+            print('Month: {}, ratio: {}'.format(month, month / months))
             target_distance = start_dist + delta_dist * month / months
+            print('target: {}'.format(i, month, target_distance))
 
         if week.variant == Week_variants.Rest:
             target_distance *= 0.6  # Rest week is 60 %
