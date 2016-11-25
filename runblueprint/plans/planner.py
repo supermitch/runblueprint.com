@@ -67,22 +67,17 @@ def assign_weekly_distance(plan, form_data):
         if week.type == Week_types.Taper:
             taper_index = i  # First week before Taper is the peak week
             break
-    weeks = taper_index - start_index - 4  # We do one month at base mileage
-    months = weeks / 4
-    print('Weeks: {}'.format(weeks))
-    print('Months: {}'.format(months))
+    weeks = taper_index - start_index - 4  # -4 b/c we do one month at base mileage
+    months = math.ceil(weeks / 4)  # math.ceil so last month is at peak mileage even if only one week.
 
     # Set work volumes
     # TODO: set distances differently for base & work phases
     for i, week in enumerate(plan.weeks[:taper_index]):  # Fill in from weeks 0 to peak week, inclusive
-        print('i: {}'.format(i))
         if form_data.growth_method == 'gradual':  # Weekly increases
-            target_distance = start_dist + delta_dist / weeks * i  # Linearly increase in mileage from start to peak
+            target_distance = start_dist + delta_dist * i / weeks  # Linearly increase in mileage from start to peak
         else:  # Daniels monthly increases
             month = math.floor(i / 4)  # Increase mileage every 4 weeks
-            print('Month: {}, ratio: {}'.format(month, month / months))
             target_distance = start_dist + delta_dist * month / months
-            print('target: {}'.format(i, month, target_distance))
 
         if week.variant == Week_variants.Rest:
             target_distance *= 0.6  # Rest week is 60 %
