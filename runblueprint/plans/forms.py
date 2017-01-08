@@ -27,7 +27,7 @@ class PlanForm(forms.Form):
     # Race details
     race_date = forms.DateField(initial=date_utils.six_months,
         help_text='(yyyy-mm-dd)')
-    race_distance = forms.IntegerField(initial=100)
+    race_distance = forms.IntegerField(label='Race distance (km)', initial=100)
 
     # Running ability
     steady_mileage = forms.IntegerField(initial=40, required=False,
