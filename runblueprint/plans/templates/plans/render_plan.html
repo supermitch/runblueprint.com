@@ -12,21 +12,27 @@
 
     <!-- Custom styles for this template -->
     {% load staticfiles %}
-    <link href="{% static 'style.css' %}" rel="stylesheet">
+    <link href="{% static 'plan.css' %}" rel="stylesheet">
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}"/>
   </head>
   <body>
+    <div class="container plan">
+      <h1>Plan number {{ plan.id }}</h1>
 
-    <h1>Plan number {{ plan.id }}</h1>
-    {% for week in plan.weeks %}
-    <h3>Week {{ week.number }} - {{ week.title }}</h3>
-      <ul>
-      {% for day in week.days %}
-        <li>Day {{ day.number }}: {{ day.distance|floatformat:2 }}</li>
+      {% for week in plan.weeks %}
+      <table class="table table-striped week">
+        <tbody>
+          <h3>Week {{ week.number }} - {{ week.title }}</h3>
+          {% for day in week.days %}
+            <tr>
+              <td class="day">Day {{ day.number }}: {{ day.distance|floatformat:2 }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
       {% endfor %}
-      </ul>
-    {% endfor %}
 
+    </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
