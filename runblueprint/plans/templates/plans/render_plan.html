@@ -22,10 +22,14 @@
       {% for week in plan.weeks %}
       <table class="table table-striped week">
         <tbody>
-          <h3>Week {{ week.number }} - {{ week.title }}</h3>
+          <h3>Week {{ week.number }} - {{ week.title }} - {{ week.distance }}</h3>
           {% for day in week.days %}
             <tr>
-              <td class="day">Day {{ day.number }}: {{ day.distance|floatformat:2 }}</td>
+              <td class="day">{{ day.number }}.</td>
+              <td>{{ day.distance|floatformat:2 }} </dt>
+              <td>{{ day.date|date:"D M d" }}</td>
+              <td>{{ day.type.name }}</td>
+              <td>{{ day.workout }}</td>
             </tr>
           {% endfor %}
         </tbody>
