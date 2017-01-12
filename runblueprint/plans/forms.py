@@ -5,7 +5,6 @@ from django import forms
 from . import date_utils
 
 
-UNITS = [('mi', 'mi'), ('km', 'km')]
 TERRAINS = [('flat', 'flat'), ('hilly', 'hilly'), ('mountain', 'mountain')]
 WEEKENDS = [('Saturday', 'Saturday'), ('Sunday', 'Sunday')]
 WEEKDAYS = [
@@ -24,28 +23,31 @@ class PlanForm(forms.Form):
     # Other
     race_name = forms.CharField(required=False)
 
+    # Units
+    UNITS = [('mi', 'miles'), ('km', 'kilometres')]
+    units = forms.ChoiceField(choices=UNITS, widget=forms.RadioSelect(), initial='mi', required=True,
+        label='Distance units',
+        help_text='Units for all measurements')
+
     # Race details
-    race_date = forms.DateField(initial=date_utils.six_months,
+    race_date = forms.DateField(initial=date_utils.six_months, required=True,
         help_text='(yyyy-mm-dd)')
-    race_distance = forms.IntegerField(label='Race distance (km)', initial=100)
+    race_distance = forms.IntegerField(initial=100, required=True,
+        label='Race distance')
 
     # Running ability
     steady_mileage = forms.IntegerField(initial=40, required=False,
-            help_text='Weekly mileage you could handle without overuse injuries')
+        help_text='Weekly mileage you could handle without overuse injuries')
 
     # Schedule
-    plan_start = forms.DateField(label='Training start date',
-        help_text='(yyyy-mm-dd)',
-        initial=datetime.date.today)
-    week_day_start = forms.ChoiceField(choices=WEEKDAYS,
-        initial=WEEKDAYS[0][0],
-        required=True)
+    plan_start = forms.DateField(initial=datetime.date.today, required=True,
+        label='Training start date',
+        help_text='(yyyy-mm-dd)')
+    week_day_start = forms.ChoiceField(choices=WEEKDAYS, initial=WEEKDAYS[0][0], required=True)
 
-    taper_length = forms.IntegerField(initial=3,
-        required=False,
+    taper_length = forms.IntegerField(initial=3, required=False,
         help_text='We recommend 2 or 3 weeks')
-    recovery_weeks = forms.IntegerField(initial=5,
-        required=False,
+    recovery_weeks = forms.IntegerField(initial=5, required=False,
         help_text='We recommend between 5 and 8 weeks')
 
     # Training options
