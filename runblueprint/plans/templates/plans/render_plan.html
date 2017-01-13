@@ -17,26 +17,24 @@
   </head>
   <body>
     <div class="container plan">
-      <h2>{{ plan }}|capfirst</h2>
+      <h2>{{ plan|capfirst }}</h2>
 
       {% for week in plan.weeks %}
       <table class="table table-striped table-condensed table-bordered">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Distance</th>
             <th>Date</th>
+            <th>Distance</th>
             <th>Type</th>
             <th>Workout</th>
           </tr>
         </thead>
         <tbody>
-          <h3>Week {{ week.number }} - {{ week.title }} - {{ week.distance }}</h3>
+          <h3>Week {{ week.number }}: {{ week.title }} - {{ week.distance }}km</h3>
           {% for day in week.days %}
             <tr>
-              <th scope="row">{{ day.number }}.</th>
+              <th scope="row">{{ day.date|date:"l, d M" }}</th>
               <td>{{ day.distance|floatformat:2 }} </dt>
-              <td>{{ day.date|date:"D M d" }}</td>
               <td>{{ day.type.name }}</td>
               <td>{{ day.workout }}</td>
             </tr>
