@@ -3,3 +3,10 @@
 .week {}
 
 .day {}
+
+.table-light {
+    background-color: ghostwhite;
+}
+.table-dark {
+    background-color: mintcream;
+}
