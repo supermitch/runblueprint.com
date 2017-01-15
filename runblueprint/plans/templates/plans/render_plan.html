@@ -20,7 +20,8 @@
       <h1>{{ plan.name|capfirst }} <small>{{ plan.length }} week plan</small></h1>
 
       {% for week in plan.weeks %}
-      <table class="table {% cycle 'table-light' 'table-dark' %}">
+      <table class="table table-condensed{% cycle 'table-light' 'table-dark' %}">
+        <caption>{{ week.title }} - {{ week.distance }}km</caption>
         <thead>
           <tr>
             <th>Date</th>
@@ -30,7 +31,6 @@
           </tr>
         </thead>
         <tbody>
-          <h4>{{ week.title }} - {{ week.distance }}km</h4>
           {% for day in week.days %}
             <tr>
               <th scope="row">{{ day.date|date:"l, d M" }}</th>
