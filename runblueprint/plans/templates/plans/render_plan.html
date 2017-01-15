@@ -17,7 +17,7 @@
   </head>
   <body>
     <div class="container plan">
-      <h2>{{ plan|capfirst }}</h2>
+      <h1>{{ plan.name|capfirst }} <small>{{ plan.length }} week plan</small></h1>
 
       {% for week in plan.weeks %}
       <table class="table {% cycle 'table-light' 'table-dark' %}">

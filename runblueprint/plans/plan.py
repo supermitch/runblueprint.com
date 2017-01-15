@@ -31,6 +31,10 @@ class Plan():
     def start_date(self):
         return self.weeks[0].days[0].date
 
+    @property
+    def length(self):
+        return len(self.weeks)
+
     def peak_week(self):
         """ Find the peak week, which is the longest by distance. """
         max_distance = 0
