@@ -1,12 +1,22 @@
-.plan {}
-
-.week {}
-
-.day {}
-
 .table-light {
     background-color: ghostwhite;
 }
 .table-dark {
     background-color: mintcream;
+}
+
+.table-column-date {
+    width: 20%;
+}
+
+.table-column-distance {
+    width: 20%;
+}
+
+.table-column-type {
+    width: 20%;
+}
+
+.table-column-workout {
+    width: 40%;
 }
