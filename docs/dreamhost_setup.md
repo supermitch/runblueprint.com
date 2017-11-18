@@ -13,3 +13,13 @@ Host *
   ServerAliveInterval 15
   ServerAliveCountMax 4
 ```
+
+## Git setup
+
+```bash
+git config --global user.name "John Doe"
+git config --global user.email johndoe@example.com
+git config --global core.editor "vim"
+git config --global push.default simple
+# ?? git config --global pull.rebase true
+```
