@@ -4,24 +4,29 @@ Running training plan generator.
 
 See Trello project at https://trello.com/b/X6Fg9XVA/runblueprint
 
+# Requirements
+
+* Install [Pyenv](https://github.com/pyenv/pyenv#basic-github-checkout)
+* `brew install mysql` (5.7.x)
+
 # Installation
 
 You should only need to do these steps once:
 
-* Install [Pyenv](https://github.com/pyenv/pyenv#basic-github-checkout)
 ```bash
 pyenv install 3.6.3
-pyenv global 3.6.3`
+pyenv global 3.6.3
 git clone git@github.com:supermitch/runblueprint.com.git
 cd runblueprint
-python -m venv venv`
-source venv/bin/activate`
-pip install -U pip`
+python -m venv venv
+source venv/bin/activate
+pip install -U pip
 ```
 
 ## Database Setup
 
-* `brew install mysql` (5.7.x)
+Note that you need a `local_settings.py` file with your DB settings, at least!
+
 * Create user & database
   * Note: User needs permission to create test DB (line 4)
 
@@ -40,14 +45,14 @@ Every time you work you should do these steps:
 ```bash
 source venv/bin/activate
 pip install -r requirements.txt
-./manage.py migrate --settings=runblueprint.local_settings  # Run migrations
-# Note that you need a `local_settings.py` file with your DB settings, at least!
-make runserver  # Good to go
+make migrate
 ```
 
 Don't forget to freeze requirements if you installed new dependencies:
 
-* `$ pip freeze > requirements.txt`
+```bash
+pip freeze > requirements.txt
+```
 
 ## Production
 
