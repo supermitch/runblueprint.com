@@ -23,3 +23,13 @@ git config --global core.editor "vim"
 git config --global push.default simple
 # ?? git config --global pull.rebase true
 ```
+
+## Pyenv setup
+
+[Install Pyenv as usual](https://github.com/pyenv/pyenv#basic-github-checkout),
+but also do the following:
+
+```bash
+mkdir ~/tmp
+echo 'export TMPDIR="$HOME/tmp"' >> ~/.bash_profile  # .zprofile for zsh
+```
