@@ -8,21 +8,25 @@ See Trello project at https://trello.com/b/X6Fg9XVA/runblueprint
 
 You should only need to do these steps once:
 
-* Download [Python 3.5+](https://www.python.org/downloads/)
-* Clone repo
-* Make virtual env in repo root: `$ python3 -m venv venv`
-* Activate venv: `$ source venv/bin/activate`
-* Upgrade pip: `$ pip install -U pip`
-* Setup database (see below)
+* Install [Pyenv](https://github.com/pyenv/pyenv#basic-github-checkout)
+```bash
+pyenv install 3.6.3
+pyenv global 3.6.3`
+git clone git@github.com:supermitch/runblueprint.com.git
+cd runblueprint
+python -m venv venv`
+source venv/bin/activate`
+pip install -U pip`
+```
 
 ## Database Setup
 
-* Install Postgresql 9.3+
-* Create user and database
+* `brew install mysql` (5.7.x)
+* Create user & database
   * Note: User needs permission to create test DB (line 4)
 
 ```bash
-$ psql
+$ mysql
 > CREATE USER <username> WITH ENCRYPTED PASSWORD <password>;
 > CREATE DATABASE <dbname> WITH OWNER <username>;
 > GRANT ALL PRIVILEGES ON DATABASE <dbname> TO <username>;
@@ -31,14 +35,15 @@ $ psql
 
 # Development
 
-Every time you work you need to do these steps:
+Every time you work you should do these steps:
 
-* Activate venv: `$ source venv/bin/activate`
-* Install dependencies: `$ pip install -r requirements.txt`
-* Run database migrations: `$ ./manage.py migrate --settings=runblueprint.local_settings`
-  * Note that you need a `local_settings.py` file with your DB settings, at least!
-* Run local server: `$ ./manage.py runserver --settings=runblueprint.local_settings`
-  * (Or `make runserver`)
+```bash
+source venv/bin/activate
+pip install -r requirements.txt
+./manage.py migrate --settings=runblueprint.local_settings  # Run migrations
+# Note that you need a `local_settings.py` file with your DB settings, at least!
+make runserver  # Good to go
+```
 
 Don't forget to freeze requirements if you installed new dependencies:
 
@@ -46,21 +51,17 @@ Don't forget to freeze requirements if you installed new dependencies:
 
 ## Production
 
-RBP is running on AWS Elastic Beanstalk. Use the EB CLI client to interact
-with the app and environment.
-
-* [Command Reference](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb3-cmd-commands.html)
-
-**Currently there is no test environment!**
+No production environment yet... TBD.
 
 ## Makefile
 
 Some handy shortcuts in the Makefile
 
-* `$ make runserver` - Start development server
+* `$ make` - Start local development server: http://127.0.0.1:8000
 * `$ make test` - Run tests
-* `$ make deploy` - Deploy to **Production**
 * `$ make migrate` - Run migrations
+* `$ make deploy` - Deploy to **Test** *TBD*
+* `$ make production` - Deploy to **Production** *TBD*
 
 ## Create Superuser
 
