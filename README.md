@@ -25,23 +25,20 @@ pip install -U pip
 
 ## Database Setup
 
-Note that you need a `local_settings.py` file with your DB settings, at least!
-
-* Create user & database
-  * Note: User needs permission to create test DB (line 4)
-
+Create local user & database:
 ```bash
-$ mysql
-> CREATE USER <username> WITH ENCRYPTED PASSWORD <password>;
-> CREATE DATABASE <dbname> WITH OWNER <username>;
-> GRANT ALL PRIVILEGES ON DATABASE <dbname> TO <username>;
-> ALTER USER <username> CREATEDB;
+mysql
+CREATE USER 'runblueprint'@'localhost' IDENTIFIED WITH sha256_password BY 'runblueprint';
+CREATE DATABASE IF NOT EXISTS runblueprint;
+GRANT ALL PRIVILEGES ON `%_runblueprint`.* TO 'runblueprint'@'localhost';  # Allows test_runblueprint creation
+SHOW GRANTS FOR 'runblueprint'@'localhost';  # Check it worked
 ```
 
 # Development
 
-Every time you work you should do these steps:
+Note that you need a `local_settings.py` file with your DB settings, at least!
 
+Every time you work you should do these steps:
 ```bash
 source venv/bin/activate
 pip install -r requirements.txt
@@ -49,7 +46,6 @@ make migrate
 ```
 
 Don't forget to freeze requirements if you installed new dependencies:
-
 ```bash
 pip freeze > requirements.txt
 ```
