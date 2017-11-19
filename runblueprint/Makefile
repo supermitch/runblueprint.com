@@ -1,17 +1,28 @@
+SETTINGS=runblueprint.local_settings
+
+.DEFAULT_GOAL: all
 .PHONY: test
 
+
+all: migrate test runserver
+
 migrate:
-	. venv/bin/activate; \
-	./manage.py migrate --settings=runblueprint.local_settings;
+	@echo "\n⭐  Running migrations...\n"
+	. venv/bin/activate && ./manage.py migrate --settings=$(SETTINGS);
 
 test:
-	. venv/bin/activate; \
-	./manage.py test -v 2 --settings=runblueprint.local_settings;
+	@echo "\n⭐  Running tests...\n"
+	. venv/bin/activate && ./manage.py test -v 2 --settings=$(SETTINGS);
 
 runserver:
-	. venv/bin/activate; \
-	./manage.py runserver --settings=runblueprint.local_settings;
+	@echo "\n⭐  Running development server...\n"
+	. venv/bin/activate && ./manage.py runserver --settings=$(SETTINGS);
 
 deploy:
-	. venv/bin/activate; \
-	eb deploy;
+	@echo "\n⭐  Deploying to Test...\n"
+	@echo "❗  TBD..."
+
+
+production:
+	@echo "\n⭐  Deploying to Production...\n"
+	@echo "❗  TBD..."
