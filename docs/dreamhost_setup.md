@@ -2,12 +2,12 @@ Dreamhost Setup
 ===============
 
 ## SSH setup
+Copy your SSH key to the server:
 ```bash
-cat ~/.ssh/id_rsa.pub | ssh <usernam>e@<server>.dreamhost.com "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys"
+cat ~/.ssh/id_rsa.pub | ssh <username>@<server>.dreamhost.com "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys"
 ```
 
-Add the following to `~/.ssh/config`:
-
+Add the following to your `~/.ssh/config`:
 ```
 Host *
   ServerAliveInterval 15
@@ -15,7 +15,6 @@ Host *
 ```
 
 ## Git setup
-
 ```bash
 git config --global user.name "John Doe"
 git config --global user.email johndoe@example.com
