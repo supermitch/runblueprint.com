@@ -68,7 +68,8 @@ local_settings.py
 # Media files
 runblueprint/media/
 
-# Elastic Beanstalk Files
-runblueprint/.elasticbeanstalk/*
-!runblueprint/.elasticbeanstalk/*.cfg.yml
-!runblueprint/.elasticbeanstalk/*.global.yml
+# Pyenv
+.python-version
+
+# Ansible
+ansible_env/
