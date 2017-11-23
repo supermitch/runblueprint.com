@@ -8,6 +8,7 @@ See Trello project at https://trello.com/b/X6Fg9XVA/runblueprint
 
 * Install [Pyenv](https://github.com/pyenv/pyenv#basic-github-checkout)
 * `brew install mysql` (5.7.x)
+* [Install Ansible](/docs/ansible_setup.md)
 
 # Installation
 
@@ -61,7 +62,7 @@ Some handy shortcuts in the Makefile
 * `$ make` - Start local development server: http://127.0.0.1:8000
 * `$ make test` - Run tests
 * `$ make migrate` - Run migrations
-* `$ make deploy` - Deploy to **Test** *TBD*
+* `$ make staging` - Deploy to **Staging** *TBD*
 * `$ make production` - Deploy to **Production** *TBD*
 
 ## Create Superuser
