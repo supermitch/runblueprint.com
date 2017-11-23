@@ -1,0 +1,3 @@
+- git:
+    repo: 'git@github.com:supermitch/runblueprint.com.git'
+    dest: /checkout
