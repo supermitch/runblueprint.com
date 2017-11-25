@@ -15,15 +15,15 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-if 'RDS_DB_NAME' in os.environ:
+if 'DJANGO_DB_NAME' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get('RDS_DB_NAME', ''),
-            'USER': os.environ.get('RDS_USERNAME', ''),
-            'PASSWORD': os.environ.get('RDS_PASSWORD', ''),
-            'HOST': os.environ.get('RDS_HOSTNAME', ''),
-            'PORT': os.environ.get('RDS_PORT', ''),
+            'NAME': os.environ.get('DJANGO_DB_NAME', ''),
+            'USER': os.environ.get('DJANGO_DB_USERNAME', ''),
+            'PASSWORD': os.environ.get('DJANGO_DB_PASSWORD', ''),
+            'HOST': os.environ.get('DJANGO_DB_HOSTNAME', ''),
+            'PORT': os.environ.get('DJANGO_DB_PORT', ''),
         },
     }
 else:
@@ -31,11 +31,13 @@ else:
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')  # SECURITY WARNING: keep the secret key used in production secret!
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')
 
-DEBUG = False  # SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
 
-ALLOWED_HOSTS = ['.elasticbeanstalk.com', '.elb.amazonaws.com', '.runblueprint.com']
+ALLOWED_HOSTS = ['runblueprint.com', 'www.runblueprint.com', 'test.runblueprint.com']
 
 # Application definition
 INSTALLED_APPS = [
@@ -82,7 +84,6 @@ WSGI_APPLICATION = 'runblueprint.wsgi.application'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
