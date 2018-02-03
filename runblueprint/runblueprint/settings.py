@@ -15,27 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-if 'DJANGO_DB_NAME' in os.environ:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get('DJANGO_DB_NAME', ''),
-            'USER': os.environ.get('DJANGO_DB_USERNAME', ''),
-            'PASSWORD': os.environ.get('DJANGO_DB_PASSWORD', ''),
-            'HOST': os.environ.get('DJANGO_DB_HOSTNAME', ''),
-            'PORT': os.environ.get('DJANGO_DB_PORT', ''),
-        },
-    }
-else:
-    logging.warn('DB ENV vars not set correctly.')
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# Secret settings import from local_settings.py
 
 ALLOWED_HOSTS = ['runblueprint.com', 'www.runblueprint.com', 'test.runblueprint.com']
 
@@ -104,6 +84,8 @@ USE_L10N = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 logging.debug('STATIC ROOT {}'.format(STATIC_ROOT))
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 logging.debug('MEDIA ROOT {}'.format(MEDIA_ROOT))
+
