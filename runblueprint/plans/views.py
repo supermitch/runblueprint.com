@@ -42,7 +42,7 @@ def download(request):
         context = {}
     return render(request, 'plans/download.html', context)
 
+
 @login_required(login_url='/login/')
 def account(request):
-    context = RequestContext(request)
-    return render(request, 'registration/account.html', context)
+    return render(request, 'registration/account.html', context={})
