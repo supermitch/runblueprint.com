@@ -1,0 +1,21 @@
+- name: Create checkout directory
+  file:
+    path: /home/runblueprint/checkout/{{ domain }}
+    state: directory
+
+- name: Git pull fresh code
+  git:
+    repo: ssh://github@github.com/supermitch/runblueprint.git
+    dest: /home/runblueprint/checkout/{{ domain }}
+
+- name: Copy files to public folder
+  command: >
+    git
+    --git-dir=/home/runblueprint/checkout/{{ domain }}/.git
+    --work-tree=/home/runblueprint/{{ domain }}
+    checkout -f
+
+- name: Touch Restart
+  file:
+    path: /home/runblueprint.com/{{ domain }}/tmp/restart.txt
+    state: touch
