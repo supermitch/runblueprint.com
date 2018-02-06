@@ -7,21 +7,20 @@ all: migrate test runserver
 
 migrate:
 	@echo "\n⭐  Running migrations...\n"
-	venv/bin/python runblueprint/manage.py migrate --settings=$(SETTINGS);
+	venv/bin/python runblueprint/manage.py migrate --settings=$(SETTINGS)
 
 test:
 	@echo "\n⭐  Running tests...\n"
-	venv/bin/python runblueprint/manage.py test -v 2 --settings=$(SETTINGS);
+	venv/bin/python runblueprint/manage.py test -v 2 --settings=$(SETTINGS)
 
 runserver:
 	@echo "\n⭐  Running development server...\n"
-	venv/bin/python runblueprint/manage.py runserver --settings=$(SETTINGS);
+	venv/bin/python runblueprint/manage.py runserver --settings=$(SETTINGS)
 
-deploy:
-	@echo "\n⭐  Deploying to Test...\n"
-	@echo "❗  TBD..."
-
+staging:
+	@echo "\n⭐  Deploying to Staging...\n"
+	venv/bin/ansible-playbook -i ansible/hosts/staging ansible/django.yml
 
 production:
-	@echo "\n⭐  Deploying to Production...\n"
-	@echo "❗  TBD..."
+	@echo "\n❗⭐ Deploying to Production...\n"
+	venv/bin/ansible-playbook -i ansible/hosts/production ansible/django.yml
