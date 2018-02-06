@@ -59,9 +59,6 @@ docs/_build/
 # PyBuilder
 target/
 
-#Ipython Notebook
-.ipynb_checkpoints
-
 # local settings
 local_settings.py
 
@@ -70,6 +67,3 @@ runblueprint/media/
 
 # Pyenv
 .python-version
-
-# Ansible
-ansible_env/
