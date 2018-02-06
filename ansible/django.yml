@@ -1,5 +1,7 @@
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: all
+- name: Deploy Django App
+  hosts: all
+  remote_user: runblueprint
   roles:
     - django_app
