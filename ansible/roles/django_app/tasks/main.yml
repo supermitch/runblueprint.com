@@ -1,4 +1,9 @@
-- name: Create checkout directory
+- name: Create logging directory
+  file:
+    path: "/home/runblueprint/{{ domain }}/runblueprint/log"
+    state: directory
+
+- name: Create repository checkout directory
   file:
     path: "/home/runblueprint/checkout/{{ domain }}"
     state: directory
@@ -8,7 +13,7 @@
     repo: https://github.com/supermitch/runblueprint.com.git
     dest: "/home/runblueprint/checkout/{{ domain }}"
 
-- name: Copy files to public folder
+- name: Git checkout files to work tree
   command: >
     git
     "--git-dir=/home/runblueprint/checkout/{{ domain }}/.git"
