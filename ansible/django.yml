@@ -5,7 +5,7 @@
   remote_user: runblueprint
   vars_prompt:
     - name: proceed
-      prompt: "Are you sure you want to deploy to Prod? (y|n)"
+      prompt: "Are you sure you want to deploy to production? (y|n)"
       default: n
       private: no
   roles:

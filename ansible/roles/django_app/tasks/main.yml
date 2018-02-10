@@ -1,11 +1,7 @@
-- name: DEBUG it
-  debug:
-    msg: "Proceed is: <{{ proceed }}>"
-
 - name: Verify production deploy
   fail:
     msg: "User cancelled deploy"
-    when: proceed == "y"
+  when: proceed != "y"
 
 - name: Create logging directory
   file:

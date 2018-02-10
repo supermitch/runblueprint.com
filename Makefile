@@ -19,7 +19,7 @@ runserver:
 
 staging:
 	@echo "\n⭐  Deploying to Staging\n"
-	venv/bin/ansible-playbook -i ansible/hosts/staging ansible/django.yml --extra-vars "proceed=y"
+	venv/bin/ansible-playbook -i ansible/hosts/staging ansible/django.yml --extra-vars proceed=y
 
 production:
 	@echo "\n❗❗ Deploying to Production\n"
