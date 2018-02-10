@@ -1,5 +1,0 @@
-webservers:
-  ansible_user: runblueprint
-  host: bookstore.dreamhost.com
-  debug: True
-  domain: runblueprint.com

@@ -1,4 +1,4 @@
 ---
-host: bookstore.dreamhost.com
 debug: True
 domain: test.runblueprint.com
+continue: y

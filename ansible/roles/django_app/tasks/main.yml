@@ -1,45 +1,53 @@
+- name: DEBUG it
+  debug:
+    msg: "Proceed is: <{{ proceed }}>"
+
+- name: Verify production deploy
+  fail:
+    msg: "User cancelled deploy"
+    when: proceed == "y"
+
 - name: Create logging directory
   file:
-    path: "/home/runblueprint/{{ domain }}/runblueprint/log"
+    path: "{{ home }}/{{ domain }}/runblueprint/log"
     state: directory
 
 - name: Remove local media folder
   file:
-    path: "/home/runblueprint/{{ domain }}/runblueprint/media"
+    path: "{{ home }}/{{ domain }}/runblueprint/media"
     state: absent
 
 - name: Create media symlink
   file:
-    path: "/home/runblueprint/{{ domain }}/runblueprint/media"
-    src: "/home/runblueprint/{{ domain }}/public/media"
+    path: "{{ home }}/{{ domain }}/runblueprint/media"
+    src: "{{ home }}/{{ domain }}/public/media"
     state: link
 
 - name: Create repository checkout directory
   file:
-    path: "/home/runblueprint/checkout/{{ domain }}"
+    path: "{{ home }}/checkout/{{ domain }}"
     state: directory
 
 - name: Git pull fresh code
   git:
     repo: https://github.com/supermitch/runblueprint.com.git
-    dest: "/home/runblueprint/checkout/{{ domain }}"
+    dest: "{{ home }}/checkout/{{ domain }}"
 
 - name: Git checkout files to work tree
   command: >
     git
-    "--git-dir=/home/runblueprint/checkout/{{ domain }}/.git"
-    "--work-tree=/home/runblueprint/{{ domain }}"
+    "--git-dir={{ home }}/checkout/{{ domain }}/.git"
+    "--work-tree={{ home }}/{{ domain }}"
     checkout -f
 
 - name: Collect static files
   django_manage:
     command: collectstatic
-    app_path: "/home/runblueprint/{{ domain }}/runblueprint"
+    app_path: "{{ home }}/{{ domain }}/runblueprint"
     settings: runblueprint.local_settings
-    virtualenv: "/home/runblueprint/{{ domain }}/venv"
+    virtualenv: "{{ home }}/{{ domain }}/venv"
 
 - name: Touch Restart
   file:
-    path: "/home/runblueprint/{{ domain }}/tmp/restart.txt"
+    path: "{{ home }}/{{ domain }}/tmp/restart.txt"
     state: touch
-

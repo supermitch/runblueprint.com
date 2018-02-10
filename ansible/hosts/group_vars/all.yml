@@ -1,2 +1,4 @@
-all:
-  ansible_user: runblueprint
+---
+ansible_user: runblueprint
+host: bookstore.dreamhost.com
+home: /home/runblueprint/
