@@ -3,6 +3,17 @@
     path: "/home/runblueprint/{{ domain }}/runblueprint/log"
     state: directory
 
+- name: Remove local media folder
+  file:
+    path: "/home/runblueprint/{{ domain }}/runblueprint/media"
+    state: absent
+
+- name: Create media symlink
+  file:
+    path: "/home/runblueprint/{{ domain }}/runblueprint/media"
+    src: "/home/runblueprint/{{ domain }}/public/media"
+    state: link
+
 - name: Create repository checkout directory
   file:
     path: "/home/runblueprint/checkout/{{ domain }}"
@@ -20,7 +31,15 @@
     "--work-tree=/home/runblueprint/{{ domain }}"
     checkout -f
 
+- name: Collect static files
+  django_manage:
+    command: collectstatic
+    app_path: "/home/runblueprint/{{ domain }}/runblueprint"
+    settings: runblueprint.local_settings
+    virtualenv: "/home/runblueprint/{{ domain }}/venv"
+
 - name: Touch Restart
   file:
     path: "/home/runblueprint/{{ domain }}/tmp/restart.txt"
     state: touch
+
