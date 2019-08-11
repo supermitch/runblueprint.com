@@ -6,9 +6,8 @@ See Trello project at https://trello.com/b/X6Fg9XVA/runblueprint
 
 # Requirements
 
-* Install [Pyenv](https://github.com/pyenv/pyenv#basic-github-checkout)
-* `brew install mysql` (5.7.x)
-* [Install Ansible](/docs/ansible_setup.md)
+* `brew install mysql`
+* Python 3.6.x at least: suggest using [Pyenv](https://github.com/pyenv/pyenv#basic-github-checkout)
 
 # Installation
 
