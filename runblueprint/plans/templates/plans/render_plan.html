@@ -21,7 +21,7 @@
 
       {% for week in plan.weeks %}
       <table class="table table-condensed{% cycle 'table-light' 'table-dark' %}">
-        <caption>{{ week.title }} - {{ week.distance }}km</caption>
+        <caption>{{ week.title }} - {{ week.distance|floatformat:1 }} km</caption>
         <thead>
           <tr>
             <th class="table-column-date">Date</th>
@@ -34,7 +34,7 @@
           {% for day in week.days %}
             <tr>
               <th scope="row">{{ day.date|date:"l, d M" }}</th>
-              <td>{{ day.distance|floatformat:2 }} </dt>
+              <td>{{ day.distance|floatformat:1 }} </dt>
               <td>{{ day.type.name }}</td>
               <td>{{ day.workout }}</td>
             </tr>
