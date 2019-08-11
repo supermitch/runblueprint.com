@@ -18,19 +18,97 @@ logger = logging.getLogger(__file__)
 logger.setLevel(logging.DEBUG)
 
 
-def generate_plan(form_data):
-    plan = generate_blank_plan(form_data)
+def determine_starting_mileage(form_data):
+    return form_data.steady_mileage if form_data.steady_mileage is not None else 40
 
-    assign_phases(plan, form_data)
-    assign_week_types(plan, form_data)
-    assign_variants(plan, form_data)
-    assign_weekly_distance(plan, form_data)
-    apply_week_prototypes(plan, form_data)
-    assign_quality(plan, form_data)
-    assign_daily_distances(plan, form_data)
-    assign_week_titles(plan, form_data)
 
-    return plan
+def determine_peak_mileage(form_data):
+    return min(160, form_data.race_distance)
+
+
+def determine_max_long_run(form_data):
+    if form_data.race_distance <= 50:
+        return 38  # ~ marathon training
+    elif form_data.race_distance <= 80:
+        return 42.2  # A full to make people feel good
+    else:
+        return 45
+
+
+def determine_plan_start(plan_start, week_day_start):
+    """
+    Calculate when the plan's first day is, given that week 1 must start on
+    the specified week_day_start.
+    """
+    diff = plan_start.weekday() - week_day_start
+    delta_days = diff if diff >= 0 else 7 + diff
+    return plan_start - datetime.timedelta(delta_days)
+
+
+def needs_race_week(race_date, start_date):
+    """ Calculate if we need to add a race week. """
+    diff = race_date.weekday() - start_date.weekday()
+    return 2 <= diff < 5  # Race is in the middle of the week
+
+
+def determine_recovery_start(race_date, start_date):
+    """
+    Where race day falls in the week will determine whether it can be part
+    of taper, recovery, or it's own 'race week'.
+    """
+    diff = race_date.weekday() - start_date.weekday()
+    if 0 > diff > 7:
+        logger.error('Diff value <{}> out of bounds'.format(diff))
+        offset = 0
+    if diff >= 5:  # Race is in last 2 days: Part of Taper
+        offset = 7 - diff - 1  # Recovery starts after taper ends
+    elif diff >= 2:  # Race is in the middle of the week: During a race week
+        offset = 7 - diff - 1  # Recovery starts after race week ends
+    else:  # Race is part of Recovery week 1
+        offset = -diff - 1  # Recovery block starts after taper ends
+    return race_date + relativedelta(days=offset)
+
+
+def add_recovery_block(recovery_start, recovery_weeks):
+    return recovery_start + relativedelta(weeks=+recovery_weeks)
+
+
+def generate_plan_dates(start, end):
+    return list(d.date() for d in rrule(DAILY, dtstart=start, until=end))
+
+
+def chunk_into_weeks(seq, size=7):
+    """ Chunks days into week batches. """
+    return (seq[pos:pos + size] for pos in range(0, len(seq), size))
+
+
+def generate_blank_plan(form_data):
+    """
+    A blank plan has all the days of training in it, including
+    recovery block. But the no distances or workouts.
+    """
+    start_date = determine_plan_start(form_data.plan_start, int(form_data.week_day_start))  # TODO: Form Data Type conversion
+    recovery_start = determine_recovery_start(form_data.race_date, start_date)
+    end_date = add_recovery_block(recovery_start, form_data.recovery_weeks)
+    all_dates = generate_plan_dates(start_date, end_date)
+    all_days = list(Day(i, day) for i, day in enumerate(all_dates, start=1))
+    all_weeks = list(Week(i, week) for i, week in enumerate(chunk_into_weeks(all_days), start=1))
+    return Plan(form_data.race_name, all_weeks)
+
+
+def assign_phases(plan, form_data):
+    """ Mesocyles are applied backwards as time permits. """
+    for i, week in enumerate(plan.weeks[::-1]):  # Work backwards
+        if i < form_data.recovery_weeks:
+            week.phase = Phases.Recovery
+        elif i < form_data.recovery_weeks + 6:
+            week.phase = Phases.Taper  # Taper & Race
+        elif i < form_data.recovery_weeks + 12:
+            week.phase = Phases.Prep  # Race Preparation
+        elif i < form_data.recovery_weeks + 18:
+            week.phase = Phases.Lactate  # Lactate Threshold
+        else:
+            week.phase = Phases.Base  # Base / Endurance
 
 
 def assign_week_types(plan, form_data):
@@ -106,35 +184,6 @@ def assign_weekly_distance(plan, form_data):
         week._target_distance = recovery_percent * peak_dist
 
 
-def assign_week_titles(plan, form_data):
-    """ Turn types into titles. """
-    counter = 0
-    last_type = None
-    for i, week in enumerate(plan.weeks):
-        try:
-            if week.type == last_type:  # If this week type is the same as the last
-                counter += 1
-                week.title = '{} week {}'.format(week.type.name.capitalize(), counter)
-            else:  # It's a new type, or the first week
-                counter = 1
-                if week.type == plan.weeks[i + 1].type:  # Only add a 1 if next week is a 2!
-                    week.title = week.type.name.capitalize() + ' week 1'
-                else:
-                    week.title = week.type.name.capitalize() + ' week'  # Just a single week gets no number
-            last_type = week.type
-        except IndexError:  # Don't agonize over array bounds
-            week.title = week.type.capitalize() + ' week'
-
-        if week.variant == Week_variants.Rest:
-            week.title += ' - Rest'
-
-        for day in week.days:  # Set race week
-            if day.date == form_data.race_date and week.title != 'Race week':  # Sometimes we already have a Race Week
-                week.title += ' / Race week'
-
-    plan.peak_week().title += ' / Peak week'
-
-
 def apply_week_prototypes(plan, form_data):
     """ Apply the weekly prototype data to the individual days, e.g. distance, type. """
     for week in plan.weeks:
@@ -163,21 +212,6 @@ def apply_week_prototypes(plan, form_data):
 
             if day.date == form_data.race_date:
                 day.type = Day_types.Race
-
-
-def assign_phases(plan, form_data):
-    """ Mesocyles are applied backwards as time permits. """
-    for i, week in enumerate(plan.weeks[::-1]):  # Work backwards
-        if i < form_data.recovery_weeks:
-            week.phase = Phases.Recovery
-        elif i < form_data.recovery_weeks + 6:
-            week.phase = Phases.Taper  # Taper & Race
-        elif i < form_data.recovery_weeks + 12:
-            week.phase = Phases.Prep  # Race Preparation
-        elif i < form_data.recovery_weeks + 18:
-            week.phase = Phases.Lactate  # Lactate Threshold
-        else:
-            week.phase = Phases.Base  # Base / Endurance
 
 
 def assign_quality(plan, form_data):
@@ -217,80 +251,45 @@ def assign_daily_distances(plan, form_data):
                 day.distance = form_data.race_distance  # TODO: Split races up, based on pace, into multiple days
 
 
+def assign_week_titles(plan, form_data):
+    """ Turn types into titles. """
+    counter = 0
+    last_type = None
+    for i, week in enumerate(plan.weeks):
+        try:
+            if week.type == last_type:  # If this week type is the same as the last
+                counter += 1
+                week.title = '{} week {}'.format(week.type.name.capitalize(), counter)
+            else:  # It's a new type, or the first week
+                counter = 1
+                if week.type == plan.weeks[i + 1].type:  # Only add a 1 if next week is a 2!
+                    week.title = week.type.name.capitalize() + ' week 1'
+                else:
+                    week.title = week.type.name.capitalize() + ' week'  # Just a single week gets no number
+            last_type = week.type
+        except IndexError:  # Don't agonize over array bounds
+            week.title = week.type.capitalize() + ' week'
 
-def determine_starting_mileage(form_data):
-    return form_data.steady_mileage if form_data.steady_mileage is not None else 40
+        if week.variant == Week_variants.Rest:
+            week.title += ' - Rest'
 
+        for day in week.days:  # Set race week
+            if day.date == form_data.race_date and week.title != 'Race week':  # Sometimes we already have a Race Week
+                week.title += ' / Race week'
 
-def determine_peak_mileage(form_data):
-    return max(160, form_data.race_distance)
-
-
-def determine_max_long_run(form_data):
-    if form_data.race_distance <= 50:
-        return 38  # ~ marathon training
-    elif form_data.race_distance <= 80:
-        return 42.2  # A full to make people feel good
-    else:
-        return 45
-
-
-def generate_blank_plan(form_data):
-    """
-    A blank plan has all the days of training in it, including
-    recovery block. But the no distances or workouts.
-    """
-    start_date = determine_plan_start(form_data.plan_start, int(form_data.week_day_start))  # TODO: Form Data Type conversion
-    recovery_start = determine_recovery_start(form_data.race_date, start_date)
-    end_date = add_recovery_block(recovery_start, form_data.recovery_weeks)
-    all_dates = generate_plan_dates(start_date, end_date)
-    all_days = list(Day(i, day) for i, day in enumerate(all_dates, start=1))
-    all_weeks = list(Week(i, week) for i, week in enumerate(chunk_into_weeks(all_days), start=1))
-    return Plan(form_data.race_name, all_weeks)
+    plan.peak_week().title += ' / Peak week'
 
 
-def determine_plan_start(plan_start, week_day_start):
-    """
-    Calculate when the plan's first day is, given that week 1 must start on
-    the specified week_day_start.
-    """
-    diff = plan_start.weekday() - week_day_start
-    delta_days = diff if diff >= 0 else 7 + diff
-    return plan_start - datetime.timedelta(delta_days)
+def generate_plan(form_data):
+    plan = generate_blank_plan(form_data)
 
+    assign_phases(plan, form_data)
+    assign_week_types(plan, form_data)
+    assign_variants(plan, form_data)
+    assign_weekly_distance(plan, form_data)
+    apply_week_prototypes(plan, form_data)
+    assign_quality(plan, form_data)
+    assign_daily_distances(plan, form_data)
+    assign_week_titles(plan, form_data)
 
-def needs_race_week(race_date, start_date):
-    """ Calculate if we need to add a race week. """
-    diff = race_date.weekday() - start_date.weekday()
-    return 2 <= diff < 5  # Race is in the middle of the week
-
-
-def determine_recovery_start(race_date, start_date):
-    """
-    Where race day falls in the week will determine whether it can be part
-    of taper, recovery, or it's own 'race week'.
-    """
-    diff = race_date.weekday() - start_date.weekday()
-    if 0 > diff > 7:
-        logger.error('Diff value <{}> out of bounds'.format(diff))
-        offset = 0
-    if diff >= 5:  # Race is in last 2 days: Part of Taper
-        offset = 7 - diff - 1  # Recovery starts after taper ends
-    elif diff >= 2:  # Race is in the middle of the week: During a race week
-        offset = 7 - diff - 1  # Recovery starts after race week ends
-    else:  # Race is part of Recovery week 1
-        offset = -diff - 1  # Recovery block starts after taper ends
-    return race_date + relativedelta(days=offset)
-
-
-def add_recovery_block(recovery_start, recovery_weeks):
-    return recovery_start + relativedelta(weeks=+recovery_weeks)
-
-
-def generate_plan_dates(start, end):
-    return list(d.date() for d in rrule(DAILY, dtstart=start, until=end))
-
-
-def chunk_into_weeks(seq, size=7):
-    """ Chunks days into week batches. """
-    return (seq[pos:pos + size] for pos in range(0, len(seq), size))
+    return plan
