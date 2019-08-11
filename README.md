@@ -28,6 +28,7 @@ pip install -U pip
 
 Create local user & database:
 ```bash
+mysql.server start
 mysql
 CREATE USER 'runblueprint'@'localhost' IDENTIFIED WITH sha256_password BY 'runblueprint';
 CREATE DATABASE IF NOT EXISTS runblueprint;
