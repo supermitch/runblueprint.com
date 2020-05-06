@@ -1,5 +1,5 @@
 from django.test import Client, TestCase
-from django.core.urlresolvers import get_resolver, reverse
+from django.urls import get_resolver, reverse
 
 from plans import urls as plan_urls
 
