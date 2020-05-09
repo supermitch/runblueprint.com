@@ -302,7 +302,7 @@ def assign_week_titles(plan, form_data):
                     week.title = week.type.name.capitalize() + ' week'  # Just a single week gets no number
             last_type = week.type
         except IndexError:  # Don't agonize over array bounds
-            week.title = week.type.capitalize() + ' week'
+            week.title = week.type.name.capitalize() + ' week'
 
         if week.variant == Week_variants.Rest:
             week.title += ' - Rest'
