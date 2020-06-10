@@ -179,9 +179,43 @@ def assign_weekly_distance(plan, form_data):
         taper_percent = taper_percents[idx]
         week._target_distance = taper_percent * peak_dist
 
-    for idx, (i, week) in enumerate(plan.get_weeks_by_type(Week_types.Recovery), start=1):
-        recovery_percent = {1: 0.20, 2: 0.36, 3: 0.43, 4: 0.50, 5: 0.59}[idx]
-        week._target_distance = recovery_percent * peak_dist
+    recovery_weeks = [week for (i, week) in plan.get_weeks_by_type(Week_types.Recovery)]
+    recovery_week_indices = [i for (i, week) in plan.get_weeks_by_type(Week_types.Recovery)]
+
+    # recovery week algorithm assumes continuous weeks, this is a sanity check
+    if not are_indices_continuous(recovery_week_indices):
+        logger.warning("Recovery weeks are no longer continuous, recovery week distances will not be accurate.")
+    assign_recovery_week_dists(recovery_weeks, peak_dist)
+
+
+def are_indices_continuous(week_indices):
+    if len(week_indices) <= 1:
+        return True
+
+    return week_indices == list(range(week_indices[0], week_indices[-1] + 1))
+
+
+def assign_recovery_week_dists(recovery_weeks, post_recovery_dist):
+    recovery_dists = get_weekly_recovery_dists(len(recovery_weeks), post_recovery_dist)
+
+    for week, dist in zip(recovery_weeks, recovery_dists):
+        week._target_distance = dist
+
+
+def get_weekly_recovery_dists(total_weeks, post_recovery_dist):
+    if post_recovery_dist < 0.0:
+        raise ValueError("Can't have negative distances.")
+
+    return [post_recovery_dist * percent for percent in get_weekly_recovery_percents(total_weeks)]
+
+
+def get_weekly_recovery_percents(total_weeks):
+    if total_weeks <= 0:
+        return []
+
+    # weeks + 1 as would like to be peaking the week after recovery
+    weekly_increase = 1.0 / (total_weeks + 1)
+    return [weekly_increase * (i + 1) for i in range(total_weeks)]
 
 
 def apply_week_prototypes(plan, form_data):
@@ -268,7 +302,7 @@ def assign_week_titles(plan, form_data):
                     week.title = week.type.name.capitalize() + ' week'  # Just a single week gets no number
             last_type = week.type
         except IndexError:  # Don't agonize over array bounds
-            week.title = week.type.capitalize() + ' week'
+            week.title = week.type.name.capitalize() + ' week'
 
         if week.variant == Week_variants.Rest:
             week.title += ' - Rest'

@@ -64,6 +64,10 @@ local_settings.py
 
 # Media files
 runblueprint/media/
+public/media
 
 # Pyenv
 .python-version
+
+# PyCharm
+.idea

@@ -11,7 +11,7 @@ migrate:
 
 test:
 	@echo "\n⭐  Running tests\n"
-	venv/bin/python runblueprint/manage.py test -v 2 --settings=$(SETTINGS)
+	venv/bin/python runblueprint/manage.py test runblueprint -v 2 --settings=$(SETTINGS)
 
 runserver:
 	@echo "\n⭐  Running development server\n"
