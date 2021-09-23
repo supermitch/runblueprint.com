@@ -6,7 +6,7 @@ cffi==1.12.3
 cryptography==3.2
 Django==2.2.13
 django-webtest==1.9.7
-Jinja2==2.10.1
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 mysqlclient==1.4.2.post1
 paramiko==2.6.0
