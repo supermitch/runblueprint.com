@@ -18,6 +18,6 @@ PyYAML==5.4
 six==1.12.0
 soupsieve==2.0
 sqlparse==0.3.0
-waitress==1.4.3
+waitress==2.1.1
 WebOb==1.8.6
 WebTest==2.0.35
